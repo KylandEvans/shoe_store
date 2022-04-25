@@ -1,0 +1,175 @@
+html,
+body {
+	font-family: "Inconsolata", monospace;
+}
+
+.logo {
+	height: 60px;
+	width: 60px;
+}
+
+.main-container {
+	width: 100vw;
+}
+
+.banner-image {
+	width: 100%;
+	height: 60%;
+}
+
+.shoe-link {
+	padding: 12px;
+}
+
+.shoe-link,
+.shoe-link:hover,
+.shoe-link:active,
+.shoe-link:visited {
+	color: black;
+	text-decoration: none;
+}
+
+.shoe-link:hover {
+	background-color: rgba(187, 187, 187, 0.103);
+	border-radius: 15px;
+}
+
+.cart-wrapper {
+	height: 100vh;
+	width: 100vw;
+	background-color: transparent;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+}
+
+.cart {
+	height: 100vh;
+	width: 250px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: rgb(201, 201, 201);
+	z-index: 2;
+	overflow-y: scroll;
+}
+
+.cart-button {
+	background-color: transparent;
+	border: none;
+	margin-right: 15px;
+}
+
+.cart-item {
+	margin: 50px 0 0 30px;
+}
+
+.cart-item:hover .cart-btn-delete {
+	visibility: visible;
+}
+
+.cart-image {
+	height: 150px;
+	width: 150px;
+}
+
+.cart-price {
+	color: rgb(32, 32, 32);
+}
+
+.cart-btn-delete {
+	visibility: hidden;
+}
+
+.cart-total-wrapper {
+	margin: 20px 0 0 7px;
+}
+
+.cart-btn-checkout {
+	width: 100%;
+	margin: 30px 0 5px 0;
+	position: sticky;
+	bottom: 0;
+	right: 0;
+}
+
+.cart-btn-checkout button {
+	width: 100%;
+}
+
+.login-modal {
+	display: none; /* TEMPORARY!! Change back to none when finished styling */
+	position: fixed;
+}
+
+.password-show {
+	display: none;
+}
+
+.password-show,
+.password-hide {
+	cursor: pointer;
+}
+
+.noscroll {
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+.item-show {
+	display: block;
+}
+
+.item-hide {
+	display: none;
+}
+
+.checkout-header-styles {
+	background-color: rgba(224, 224, 224, 0.4);
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	cursor: pointer;
+}
+
+.checkout-form-container {
+	/* background-color: rgba(224, 224, 224, 0.13); */
+	border-radius: 12px;
+}
+
+.toggleArrow {
+	height: 20px;
+	width: 20px;
+}
+
+.toggleArrowOpen {
+	transform: rotate(0deg);
+}
+
+.toggleArrowClose {
+	transform: rotate(180deg);
+}
+
+.item-image {
+	height: 130px;
+	width: 130px;
+}
+
+.remove-link-attributes,
+.remove-link-attributes:hover,
+.remove-link-attributes:visited {
+	color: unset;
+	text-decoration: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+	-moz-appearance: textfield;
+}

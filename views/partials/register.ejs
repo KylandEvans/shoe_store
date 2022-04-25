@@ -1,0 +1,80 @@
+<div class="modal register-modal animate__animated" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Register</h5>
+				<button
+					type="button"
+					class="modal-close btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<form action="/register" class="form-control" method="post">
+					<label for="registerFirstName">First Name: </label>
+					<input
+						type="text"
+						name="firstName"
+						id="registerFirstName"
+						class="form-control register-first-name-input"
+						autocomplete="given-name"
+					/>
+					<label for="registerLastName">Last Name: </label>
+					<input
+						type="text"
+						name="lastName"
+						id="registerLastName"
+						class="form-control"
+						autocomplete="family-name"
+					/>
+					<label for="registerEmail">Email: </label>
+					<input
+						type="email"
+						name="email"
+						id="registerEmail"
+						class="form-control"
+						autocomplete="email"
+					/>
+					<label for="registerPhone">Phone Number: </label>
+					<input
+						type="tel"
+						name="phone"
+						id="registerPhone"
+						class="form-control"
+						autocomplete="tel"
+					/>
+					<label for="registerUsername">Username</label>
+					<input
+						type="text"
+						name="username"
+						id="username"
+						class="form-control"
+					/>
+					<label for="registerPassword">Password</label>
+					<input
+						type="password"
+						name="password"
+						id="registerPassword"
+						class="form-control"
+					/>
+					<label for="registerConfirmPassword">Confirm Password</label>
+					<input
+						type="password"
+						name="confirmPassword"
+						id="registerConfirmPassword"
+						class="form-control"
+					/>
+					<button
+						class="btn btn-secondary"
+						data-bs-dismiss="modal"
+						type="reset"
+					>
+						Clear
+					</button>
+					<button class="btn btn-primary" type="submit">Register</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

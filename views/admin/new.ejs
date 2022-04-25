@@ -1,0 +1,225 @@
+<%- layout("layout/boilerplate") %>
+<h1>Add New Shoe</h1>
+
+<form action="/admin/newShoe" method="POST" class="form-control px-5">
+	<label for="name">Name: </label>
+	<input
+		type="text"
+		name="name"
+		id="name"
+		class="form-control"
+		placeholder="Name of Shoe"
+	/>
+	<label for="subtitle">Subtitle: </label>
+	<input
+		type="text"
+		name="subTitle"
+		id="subtitle"
+		class="form-control"
+		placeholder="i.e. 'Men's running shoes'"
+	/>
+	<label for="price">Price: </label>
+	<input
+		type="number"
+		name="price"
+		id="price"
+		placeholder="Price of Shoe"
+		class="form-control"
+		step="0.01"
+	/>
+	<label for="brand">Brand: </label>
+	<input
+		type="text"
+		name="brand"
+		id="brand"
+		placeholder="i.e. 'Nike', 'Puma', etc.."
+		class="form-control"
+	/>
+	<label for="gender">Gender: </label>
+	<select name="gender" id="gender" class="form-select">
+		<option value="men">Men</option>
+		<option value="woman">Woman</option>
+	</select>
+	<label for="image">Image: </label>
+	<input
+		type="text"
+		name="image"
+		id="image"
+		class="form-control"
+		placeholder="Image of Shoe"
+	/>
+	<h3>Choose Sizes Avlible</h3>
+	<div class="sizes-wrapper container">
+		<div class="row">
+			<!-- group-1 -->
+			<div class="form-group col-4">
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="6"
+						id="6-check"
+					/>
+					<label class="form-check-label" for="6-check">6</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="6.5"
+						id="6.5-check"
+					/>
+					<label class="form-check-label" for="6.5-check">6.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="7"
+						id="7-check"
+					/>
+					<label class="form-check-label" for="7-check">7</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="7.5"
+						id="7.5-check"
+					/>
+					<label class="form-check-label" for="7.5-check">7.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="8"
+						id="8-check"
+					/>
+					<label class="form-check-label" for="8-check">8</label>
+				</div>
+			</div>
+
+			<!-- group-2 -->
+			<div class="form-group col-4">
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						name="size[]"
+						type="checkbox"
+						value="8.5"
+						id="8.5-check"
+					/>
+					<label class="form-check-label" for="8.5-check">8.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="9"
+						id="9-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="9-check">9</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="9.5"
+						id="9.5-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="9.5-check">9.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="10"
+						id="10-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="10-check">10</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="10.5"
+						id="10.5-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="10.5-check">10.5</label>
+				</div>
+			</div>
+
+			<!-- group-3 -->
+			<div class="form-group col-4">
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="11"
+						id="11-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="11-check">11</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="11.5"
+						id="11.5-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="11.5-check">11.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="12"
+						id="12-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="12-check">12</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="12.5"
+						id="12.5-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="12.5-check">12.5</label>
+				</div>
+				<div class="form-check">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="13"
+						id="13-check"
+						name="size[]"
+					/>
+					<label class="form-check-label" for="13-check">13</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-control d-flex flex-column mt-3">
+		<label for="description">Description</label>
+		<textarea
+			name="description"
+			id="description"
+			cols="100"
+			rows="5"
+		></textarea>
+	</div>
+	<div class="my-3">
+		<button class="btn btn-primary" type="submit">Make New Shoe</button>
+		<button class="btn btn-warning" type="reset">Clear the Form</button>
+	</div>
+</form>

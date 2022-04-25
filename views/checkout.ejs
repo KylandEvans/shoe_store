@@ -1,0 +1,187 @@
+<% layout("layout/boilerplate.ejs") -%>
+<h1>Checkout</h1>
+
+<%- include("./partials/paymentAndShipping.ejs") %>
+
+<main class="container">
+	<form action="/checkout" class="row gap-3" method="POST">
+		<div class="col-6 offset-1 checkout-form-container p-0">
+			<div class="d-flex checkout-address-header checkout-header-styles p-2">
+				<h3>1 Shipping Address:</h3>
+				<div class="toggleAddress">
+					<img src="Icons/toggleArrow.svg" alt="" class="toggleArrow" />
+				</div>
+			</div>
+			<section class="border-bottom address-select">
+				<% if(currentUser.addresses && currentUser.addresses.length){ %>
+				<%currentUser.addresses.forEach((address, i) => { %>
+				<div class="form-check">
+					<input
+						type="radio"
+						name="shippingAddress"
+						id="shippingAddress<%= i %>"
+						class="form-check-input"
+						value="<%= address._id %>"
+					/>
+					<label for="shippingAddress<%= i %>" class="form-check-label">
+						<p class="m-0"><%= address.address1 %></p>
+						<% if(address.address2){ %>
+						<p class="m-0"><%= address.address2 %></p>
+						<%}%>
+						<p class="m-0">
+							<%= address.city %>, <%= address.state %> <%= address.zipCode %>
+						</p>
+					</label>
+				</div>
+				<% }) %> <% } %>
+			</section>
+			<a href="#" class="d-flex align-items-center btn btn-transparent add-address-btn">
+				<img src="Icons/new_plus_circle.svg" alt="" />
+				<h6 class="text-center m-0 ms-2">Add new Shipping Address</h6>
+			</a>
+
+			<section class="checkout-header-styles togglePayment">
+				<div class="d-flex p-2">
+					<h3>2 Payment Method:</h3>
+					<div class="">
+						<img src="Icons/toggleArrow.svg" alt="" class="toggleArrow-payment toggleArrow" />
+					</div>
+				</div>
+				<div class="pmt-display-area payment-select"></div>
+			</section>
+			<a href="#" class="d-flex align-items-center btn btn-transparent add-pmt-btn">
+				<img src="Icons/new_plus_circle.svg" alt="" />
+				<h6 class="text-center m-0 ms-2">Add new payment method</h6>
+			</a>
+			<section>
+				<h3>3 Review Items and Shipping:</h3>
+				<% if(cart && cart.length){ %> <% for(let item of cart){ %>
+				<a href="/shoes/<%= item.shoe._id %>" class="remove-link-attributes">
+					<div class="row mb-2">
+						<img src="<%= item.shoe.image %>" alt="" class="img-thumbnail item-image col-3" />
+						<div class="col-9">
+							<h6 class="m-0"><%= item.shoe.name %></h6>
+							<p class="text-muted m-0"><%= item.shoe.subTitle %></p>
+							<p>Size: <%= item.size %></p>
+							<p>$ <%= item.shoe.price.toFixed(2) %></p>
+						</div>
+					</div>
+				</a>
+				<% } %> <% }else{ %>
+				<h4 class="text-muted">Cart is empty!</h4>
+				<% } %>
+			</section>
+		</div>
+
+		<section class="total-section col-3 h-auto">
+			<div class="border p-3">
+				<div class="d-flex justify-content-between">
+					<h6>Items (<%= currentUser.cart.length %>):</h6>
+					<p>$ <%= currentUser.total.toFixed(2) %></p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<h6>Shipping &amp; Handling:</h6>
+					<p class="border-bottom pb-2">$ <%= shippingFee.toFixed(2) %></p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<h6>Total before tax:</h6>
+					<p>$ <%= currentUser.total.toFixed(2) %></p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<h6>Estimated Tax:</h6>
+					<p>$ <%= tax.toFixed(2) %></p>
+				</div>
+				<div class="d-flex justify-content-between border-top pt-2">
+					<h4>Total</h4>
+					<h4>$ <%= orderTotal.toFixed(2) %></h4>
+				</div>
+				<div class="d-flex justify-content-center">
+					<button class="btn btn-success w-100">Place Order</button>
+				</div>
+			</div>
+		</section>
+	</form>
+</main>
+
+<%- include("./partials/cart") %>
+
+<script>
+	const addPmtBtn = document.querySelector(".add-pmt-btn");
+	addPmtBtn.addEventListener("click", () => {
+		const pmtModal = document.querySelector(".payment-modal");
+		pmtModal.style.display = "block";
+		pmtModal.style.position = "fixed";
+		pmtModal.classList.add("animate__fadeInUpBig");
+	});
+
+	const addAddressBtn = document.querySelector(".add-address-btn");
+	addAddressBtn.addEventListener("click", () => {
+		const addressModal = document.querySelector(".address-modal");
+		addressModal.style.display = "block";
+		addressModal.style.position = "fixed";
+		addressModal.classList.add("animate__fadeInUpBig");
+	});
+
+	const displayPaymentMethods = () => {
+		if (localStorage.length) {
+			const strg = JSON.parse(localStorage.getItem("0"));
+			const displayArea = document.querySelector(".pmt-display-area");
+			strg.forEach((item, i) => {
+				const lastFour = item.num.substring(12);
+				const newDiv = document.createElement("div");
+				const newRadio = document.createElement("input");
+				const newLabel = document.createElement("label");
+				const newP = document.createElement("p");
+				newDiv.classList.add("form-check", "form-control");
+				newRadio.classList.add("form-check-input");
+				newRadio.setAttribute("type", "radio");
+				newRadio.setAttribute("name", "paymentSelect");
+				newRadio.setAttribute("value", lastFour);
+				newRadio.setAttribute("id", i);
+				newLabel.setAttribute("for", i);
+				newP.innerText = `Name on Card: ${item.name}`;
+				displayArea.append(newDiv);
+				newDiv.append(newRadio);
+				newDiv.append(newLabel);
+				newLabel.append(newP);
+				const anotherP = document.createElement("p");
+				anotherP.innerText = `Card Ending: ***${lastFour}`;
+				newLabel.append(anotherP);
+			});
+		}
+	};
+
+	displayPaymentMethods();
+
+	const toggleAddress = document.querySelector(".checkout-address-header");
+	const addressSelect = document.querySelector(".address-select");
+	const addressSelectArrow = document.querySelector(".toggleArrow");
+
+	const togglePayment = document.querySelector(".togglePayment");
+	const paymentSelect = document.querySelector(".payment-select");
+	const paymentSelectArrow = document.querySelector(".toggleArrow-payment");
+
+	togglePayment.addEventListener("click", () => {
+		if (paymentSelect.style.display === "none") {
+			paymentSelect.style.display = "block";
+			paymentSelectArrow.classList.add("toggleArrowOpen");
+			paymentSelectArrow.classList.remove("toggleArrowClose");
+		} else {
+			paymentSelect.style.display = "none";
+			paymentSelectArrow.classList.remove("toggleArrowOpen");
+			paymentSelectArrow.classList.add("toggleArrowClose");
+		}
+	});
+
+	toggleAddress.addEventListener("click", () => {
+		if (addressSelect.style.display === "none") {
+			addressSelect.style.display = "block";
+			addressSelectArrow.classList.add("toggleArrowOpen");
+			addressSelectArrow.classList.remove("toggleArrowClose");
+		} else {
+			addressSelect.style.display = "none";
+			addressSelectArrow.classList.remove("toggleArrowOpen");
+			addressSelectArrow.classList.add("toggleArrowClose");
+		}
+	});
+</script>

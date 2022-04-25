@@ -1,0 +1,93 @@
+<%- layout("layout/boilerplate") %>
+
+<div class="container my-5">
+	<form
+		action="/admin/edit/<%= shoe._id %>?_method=PATCH"
+		method="post"
+		class="form-control"
+	>
+   <div class="d-block h-auto w-auto align-middle">
+      <img src="<%= shoe.image %>" alt="" class="img-fluid img-thumbnail h-25 w-25">
+   </div>
+
+		<!-- Name -->
+		<div class="form-floating mb-3">
+			<input
+				type="text"
+				class="form-control form-control-lg"
+				id="editName"
+				placeholder="Edit Name of Shoe"
+				name="name"
+				value="<%= shoe.name %>"
+			/>
+			<label for="editName">Edit Name of Shoe</label>
+		</div>
+
+		<!-- Subtitle -->
+		<div class="form-floating mb-3">
+			<input
+				type="text"
+				class="form-control form-control-lg"
+				id="editSubtitle"
+				placeholder="Edit Subtitle of Shoe"
+				name="subTitle"
+				value="<%= shoe.subTitle %>"
+			/>
+			<label for="editSubtitle">Edit Subtitle of Shoe</label>
+		</div>
+
+		<!-- Brand -->
+		<div class="form-floating mb-3">
+			<input
+				type="text"
+				class="form-control form-control-lg"
+				id="editBrand"
+				placeholder="Edit Brand of Shoe"
+				name="brand"
+				value="<%= shoe.brand %>"
+			/>
+			<label for="editBrand">Edit Brand of Shoe</label>
+		</div>
+
+		<!-- Gender -->
+		<div class="form-floating mb-3">
+			<select name="gender" id="gender" class="form-select form-select-lg">
+				<option value="men" <%= shoe.gender === "men" ? "selected": "" %>>Men</option>
+				<option value="women"<%= shoe.gender === "women" ? "selected": "" %>>Women</option>
+			</select>
+			<label for="editGender">Gender</label>
+		</div>
+
+		<!-- Price -->
+		<div class="form-floating mb-3">
+			<input
+				type="number"
+				class="form-control form-control-lg"
+				id="editPrice"
+				placeholder="Edit Price of Shoe"
+				name="price"
+				value="<%= shoe.price %>"
+            step="0.01"
+			/>
+			<label for="editPrice">Edit Price of Shoe</label>
+		</div>
+      
+      <!-- Size -->
+      <div class="form-control mb-3">
+         <% for(let i = 6; i <= 13; i+= 0.5){ %> 
+            <input type="checkbox" name="size[]" id="size-<%= i %>" 
+            <%= shoe.size.includes(i) ? "checked": "" %> value="<%= i %>">
+            <label for="size-<%= i %>" class="me-3"><%= i %></label>
+         <% } %> 
+		</div>
+
+      <!-- Description -->
+      <div class="form-control d-flex flex-column">
+         <label for="description">Edit Description</label>
+         <textarea name="description" id="description" cols="100" rows="5" placeholder="Edit Description of Shoe"><%= shoe.description %></textarea>
+      </div>
+      <div>
+         <button class="btn btn-primary mt-3">Save Changes</button>
+      </div>
+	</form>
+</div>

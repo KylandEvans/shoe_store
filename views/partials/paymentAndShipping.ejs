@@ -1,0 +1,235 @@
+<div class="modal payment-modal animate__animated" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Payment Info:</h5>
+				<button
+					type="button"
+					class="modal-close btn-close payment-modal-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<form action="#" class="form-control" method="post">
+					<label for="cardholderName">Name On Card: </label>
+					<input type="text" name="cardholderName" id="cardholderName" class="form-control" />
+					<label for="cardnumber">Card Number: </label>
+					<div class="form-control d-flex">
+						<input
+							type="number"
+							pattern="/^-?\d+\.?\d*$/"
+							class="form-control cc-num"
+							onkeypress="return (this.value.length === 4) ? false : true;"
+							name="cardnumber[]"
+							id="cardnumber"
+						/>
+
+						<p class="mx-2 m-auto text-center">-</p>
+						<input
+							type="number"
+							pattern="/^-?\d+\.?\d*$/"
+							onkeypress="return (this.value.length === 4) ? false : true;"
+							class="form-control cc-num"
+							name="cardnumber[]"
+						/>
+						<p class="mx-2 m-auto text-center">-</p>
+						<input
+							type="number"
+							pattern="/^-?\d+\.?\d*$/"
+							onkeypress="return (this.value.length === 4) ? false : true;"
+							class="form-control cc-num"
+							name="cardnumber[]"
+						/>
+						<p class="mx-2 m-auto text-center">-</p>
+						<input
+							type="number"
+							pattern="/^-?\d+\.?\d*$/"
+							onkeypress="return (this.value.length === 4) ? false : true;"
+							class="form-control cc-num"
+							name="cardnumber[]"
+						/>
+					</div>
+					<label for="expMonth">Experation Date:</label>
+					<div class="form-control d-flex">
+						<select name="expMonth" id="expMonth" class="form-select">
+							<option value="January" class="form-control"> January </option>
+							<option value="February" class="form-control"> February </option>
+							<option value="March" class="form-control">March</option>
+							<option value="April" class="form-control">April</option>
+							<option value="May" class="form-control">May</option>
+							<option value="June" class="form-control">June</option>
+							<option value="July" class="form-control">July</option>
+							<option value="August" class="form-control">August</option>
+							<option value="September" class="form-control"> September </option>
+							<option value="October" class="form-control"> October </option>
+							<option value="November" class="form-control"> November </option>
+							<option value="December" class="form-control"> December </option>
+						</select>
+						<select name="expYear" id="expYear" class="form-select">
+							<% for(let i = 0; i < 25; i++){ %>
+							<option value="<%= new Date().getFullYear() + i%>" class="form-control">
+								<%= new Date().getFullYear() + i %>
+							</option>
+							<% } %>
+						</select>
+					</div>
+
+					<button type="button" class="btn btn-primary mt-3 saveCC"> Save </button>
+					<button type="reset" class="btn btn-secondary mt-3"> Cancel </button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal address-modal animate__animated" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">New Shipping Address</h5>
+				<button
+					type="button"
+					class="modal-clos btn-close address-modal-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<form action="/user/add/address" class="form-control" method="post">
+					<label for="address" class="control-label">Street Address Line 1</label>
+					<input type="text" name="address1" id="address" class="form-control" />
+					<label for="address2">Street Address Line 2</label>
+					<input type="text" name="address2" id="address2" class="form-control" />
+					<label for="City/State/Zip">City/State/Zip Code</label>
+					<div class="d-flex">
+						<input type="text" name="city" id="city" class="form-control mx-1" />
+						<select name="state" id="state" class="form-select mx-1">
+							<option value="" selected="selected">State</option>
+							<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA">Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+						<input
+							type="number"
+							name="zipCode"
+							id="zipcode"
+							class="form-control mx-1"
+							onkeypress="return (this.value.length === 5) ? false : true"
+						/>
+					</div>
+					<button class="btn btn-primary mt-2" type="submit"> Add Address </button>
+
+					<button type="reset" class="btn btn-secondary mt-2" data-bs-dismiss="modal">
+						Clear
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	const paymentModalClose = document.querySelector(".payment-modal-close");
+	const paymentModal = document.querySelector(".payment-modal");
+	paymentModalClose.addEventListener("click", () => {
+		paymentModal.style.display = "none";
+	});
+
+	const addressModalClose = document.querySelector(".address-modal-close");
+	const addressModal = document.querySelector(".address-modal");
+	addressModalClose.addEventListener("click", () => {
+		addressModal.style.display = "none";
+	});
+
+	const ccNumber = document.querySelectorAll(".cc-num");
+	const newCCArr = [];
+	const saveCCBtn = document.querySelector(".saveCC");
+
+	//Get Experation Month and save it in expMonth
+	const getMonthVal = document.querySelector("#expMonth");
+	let expMonth = getMonthVal.selectedOptions[0].value;
+	getMonthVal.addEventListener("change", () => {
+		expMonth = getMonthVal.selectedOptions[0].value;
+	});
+
+	// Get the Experation year and save it in expYear
+	const getYearVal = document.querySelector("#expYear");
+	let expYear = getYearVal.selectedOptions[0].value;
+	getYearVal.addEventListener("change", () => {
+		expYear = getYearVal.selectedOptions[0].value;
+	});
+
+	saveCCBtn.addEventListener("click", () => {
+		ccNumber.forEach(item => {
+			newCCArr.push(item.value);
+		});
+		const cardholderName = document.querySelector("#cardholderName").value;
+		const newCard = newCCArr.join("");
+		const newCardObj = {
+			name: cardholderName,
+			num: newCard,
+			experationMonth: expMonth,
+			experationYear: expYear,
+		};
+		// const lastFour = newCard.substring(12);
+		if (!localStorage.length) {
+			localStorage.setItem(`0`, JSON.stringify([newCardObj]));
+		} else {
+			let ls = JSON.parse(localStorage.getItem(`0`));
+			ls.push(newCardObj);
+			localStorage.clear();
+			localStorage.setItem("0", JSON.stringify(ls));
+			console.log(localStorage.getItem("0"));
+		}
+		window.location.reload();
+	});
+</script>

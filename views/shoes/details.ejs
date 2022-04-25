@@ -1,0 +1,30 @@
+<% layout("layout/boilerplate") -%>
+<main class="container mt-5">
+	<div class="row">
+		<section class="images col-xs-12 col-lg-6">
+			<img src="<%= products.image %>" alt="" class="img-fluid" />
+		</section>
+		<section class="overview col-lg-5 d-flex flex-column align-items-end">
+			<h3><%= products.name %></h3>
+			<h5 class="text-muted"><%= products.subTitle %></h5>
+			<h6>$<%= products.price.toFixed(2) %></h6>
+			<!-- <div class="row row-cols"></div> -->
+			<form action="/shoes/<%= products._id %>" method="post" class="row row-cols">
+				<label for="size">Select a Size</label>
+				<select id="size" name="size">
+					<% products.size.forEach((el) => { %>
+					<option value="<%= el %>" name="selectedSize" class="select"> <%= el %> </option>
+					<% }) %>
+				</select>
+				<button class="btn btn-info mt-5 add-to-cart">Add to Cart</button>
+			</form>
+		</section>
+	</div>
+	<div class="row mt-5">
+		<section class="col-12">
+			<h3>Product Description</h3>
+			<p><%= products.description %></p>
+		</section>
+	</div>
+	<%- include("../partials/cart") %>
+</main>

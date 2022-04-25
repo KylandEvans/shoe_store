@@ -1,0 +1,36 @@
+<div class="cart-wrapper animate__animated animate__fadeInRight">
+	<div class="cart">
+		<button type="button" class="btn-close mt-2 ms-1 cart-close" aria-label="Close"></button>
+		<% if(cart && cart.length){ %> <% cart.forEach((item, i) => { %>
+		<div class="cart-item">
+			<img src="<%= item.shoe.image %>" alt="" class="cart-image" />
+			<h6><%= item.shoe.name %></h6>
+			<p>Size: <%= item.size %></p>
+			<p class="cart-price">$ <%= item.shoe.price.toFixed(2) %></p>
+			<form action="/?_method=PATCH" method="POST">
+				<button
+					class="btn btn-danger cart-btn-delete"
+					name="delete"
+					value="<%= [item.shoe._id, item.size] %>"
+				>
+					Delete Item
+				</button>
+			</form>
+		</div>
+		<% }) %> <% } %>
+		<div class="cart-total-wrapper">
+			<h5 class="cart-total-text">
+				Total: $ <% if(total && total > 0){ %>
+				<span><%= total.toFixed(2) %></span>
+				<% } else{ %>
+				<span>0.00</span>
+				<% } %>
+			</h5>
+		</div>
+		<form action="/checkout" method="GET">
+			<div class="cart-btn-checkout">
+				<button class="btn btn-info">Checkout:</button>
+			</div>
+		</form>
+	</div>
+</div>

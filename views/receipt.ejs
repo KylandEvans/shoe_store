@@ -1,0 +1,52 @@
+<%- layout("layout/boilerplate") %>
+
+<main class="container container-fluid mt-5">
+	<h1>Here is your receipt!</h1>
+	<div class="w-100 container-fluid my-5">
+		<!-- FIXME: Add breakpoint in CSS to break up height for small screens -->
+		<div class="row">
+			<div class="col-md-2">
+				<h3>Payment</h3>
+			</div>
+			<div class="col-md-2">
+				<h5>Items total </h5>
+				<h5>Shipping Cost </h5>
+				<h5>Estimated Tax </h5>
+				<h3>Total </h3>
+			</div>
+			<div class="col-md-2 d-flex flex-column border-end">
+				<h5>$ <%= newOrder.itemsTotal %></h5>
+				<h5>$ <%= newOrder.shippingCost %></h5>
+				<h5>$ <%= newOrder.orderTax %></h5>
+				<h3>$ <%= newOrder.orderTotal %></h3>
+			</div>
+			<div class="col-md-2">
+				<h3>Shipping</h3>
+			</div>
+			<div class="col-md-1"></div>
+			<div class="col-md-2">
+				<h5
+					><%= newOrder.shippingAddress.address1 %> <%= newOrder.shippingAddress.address2 %>
+				</h5>
+				<h5><%= newOrder.shippingAddress.city %></h5>
+				<h5><%= newOrder.shippingAddress.state %></h5>
+				<h5><%= newOrder.shippingAddress.zipCode %></h5>
+			</div>
+		</div>
+	</div>
+	<% newOrder.items.forEach(item => { %>
+	<div class="row">
+		<div class="col-3 w-25">
+			<img src="<%= item.image %>" alt="" class="img-thumbnail h-50" />
+		</div>
+		<div class="col-6">
+			<h3><%= item.name %></h3>
+			<h6><%= item.subTitle %></h6>
+			<h6>$ <%= item.price %></h6>
+		</div>
+	</div>
+
+	<% }) %>
+</main>
+
+<%- include("./partials/cart") %>
