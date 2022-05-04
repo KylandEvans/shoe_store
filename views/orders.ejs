@@ -1,0 +1,65 @@
+<%- layout("layout/boilerplate") %>
+
+<main>
+	<% for(order of userOrders){ %>
+	<div class="container border my-5">
+		<h3>Ordered On <%= order.orderDate %></h3>
+		<% for(item of order.items){ %>
+		<div class="d-flex flex-column my-3">
+			<div class="d-flex">
+				<div class="h-25 w-25">
+					<img src="<%= item.image %>" alt="" class="img-thumbnail h-50 w-50" />
+				</div>
+				<div>
+					<h6><%= item.name %></h6>
+					<h6 class="text-muted"><%= item.subTitle %></h6>
+					<h6>$<%= item.price.toFixed(2) %> </h6>
+				</div>
+			</div>
+		</div>
+		<% } %>
+		<div class="my-5">
+			<h4 class="border-bottom">Order Details:</h4>
+			<div class="d-flex">
+				<div>
+					<h6 class="fw-bolder">Items Total: </h6>
+					<h6 class="fw-bolder">Order Tax: </h6>
+					<h6 class="fw-bolder">Shipping Fee: </h6>
+					<h5 class="fw-bolder">Order Total: </h5>
+				</div>
+				<div class="ms-3">
+					<h6><%= order.itemsTotal.toFixed(2) %> </h6>
+					<h6><%= order.orderTax.toFixed(2) %></h6>
+					<h6><%= order.shippingCost.toFixed(2) %> </h6>
+					<h5 class="fw-bolder"><%= order.orderTotal.toFixed(2) %> </h5>
+				</div>
+			</div>
+		</div>
+		<div class="my-5">
+			<h4 class="border-bottom">Shipping Details:</h4>
+			<div class="d-flex">
+				<div>
+					<h6 class="fw-bolder">Address: </h6>
+					<% if(order.shippingAddress.address2){ %>
+					<h6 class="fw-bolder">&nbsp;</h6>
+					<% } %>
+					<h6 class="fw-bolder">City: </h6>
+					<h6 class="fw-bolder">State: </h6>
+					<h6 class="fw-bolder">Zip code: </h6>
+				</div>
+				<div class="ms-3">
+					<h6><%= order.shippingAddress.address1 %> </h6>
+					<% if(order.shippingAddress.address2){ %>
+					<h6><%= order.shippingAddress.address2 %> </h6>
+					<% } %>
+					<h6><%= order.shippingAddress.city %> </h6>
+					<h6><%= order.shippingAddress.state %> </h6>
+					<h6><%= order.shippingAddress.zipCode %> </h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% } %>
+</main>
+
+<%- include("./partials/cart") %>

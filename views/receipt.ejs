@@ -1,7 +1,7 @@
 <%- layout("layout/boilerplate") %>
 
 <main class="container container-fluid mt-5">
-	<h1>Here is your receipt!</h1>
+	<h1>Your order is on it's way!</h1>
 	<div class="w-100 container-fluid my-5">
 		<!-- FIXME: Add breakpoint in CSS to break up height for small screens -->
 		<div class="row">
@@ -15,10 +15,10 @@
 				<h3>Total </h3>
 			</div>
 			<div class="col-md-2 d-flex flex-column border-end">
-				<h5>$ <%= newOrder.itemsTotal %></h5>
-				<h5>$ <%= newOrder.shippingCost %></h5>
-				<h5>$ <%= newOrder.orderTax %></h5>
-				<h3>$ <%= newOrder.orderTotal %></h3>
+				<h5>$ <%= newOrder.itemsTotal.toFixed(2) %></h5>
+				<h5>$ <%= newOrder.shippingCost.toFixed(2) %></h5>
+				<h5>$ <%= newOrder.orderTax.toFixed(2) %></h5>
+				<h3>$ <%= newOrder.orderTotal.toFixed(2) %></h3>
 			</div>
 			<div class="col-md-2">
 				<h3>Shipping</h3>
@@ -47,6 +47,8 @@
 	</div>
 
 	<% }) %>
+
+	<a href="/" class="btn btn-primary">Browse more products</a>
 </main>
 
 <%- include("./partials/cart") %>

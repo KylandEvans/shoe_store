@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
 const Product = require("./product");
-const User = require("./user");
-const Address = require("./address");
 
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
-	.then(() => {
-		console.log("Mongo Connected!!");
-	})
+	.then(() => {})
 	.catch(e => {
 		console.log("Mongo Connection Failed!!");
 		console.log(e);
@@ -19,9 +15,26 @@ const orderSchema = new mongoose.Schema({
 		ref: "User",
 	},
 	shippingAddress: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Address",
-		required: true,
+		address1: {
+			type: String,
+			required: true,
+		},
+		address2: {
+			type: String,
+			required: false,
+		},
+		city: {
+			type: String,
+			required: true,
+		},
+		state: {
+			type: String,
+			required: true,
+		},
+		zipCode: {
+			type: Number,
+			required: true,
+		},
 	},
 	paymentMethod: {
 		type: Number,
@@ -55,6 +68,10 @@ const orderSchema = new mongoose.Schema({
 		default: "active",
 	},
 	orderDate: {
+		type: String,
+		default: new Date().toLocaleDateString(),
+	},
+	orderTimeStamp: {
 		type: Date,
 		default: Date.now(),
 	},

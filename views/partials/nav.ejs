@@ -1,8 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="/"
-			><img src="/Icons/logo.svg" alt="" class="logo"
-		/></a>
+		<a class="navbar-brand" href="/"><img src="/Icons/logo.svg" alt="" class="logo" /></a>
 		<button
 			class="navbar-toggler"
 			type="button"
@@ -39,9 +37,7 @@
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/shoes/nike">Nike</a></li>
 						<li>
-							<a class="dropdown-item" href="/shoes/newbalance"
-								>New Balance</a
-							>
+							<a class="dropdown-item" href="/shoes/newbalance">New Balance</a>
 						</li>
 						<li><a class="dropdown-item" href="/shoes/puma">Puma</a></li>
 					</ul>
@@ -60,48 +56,63 @@
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<li>
-							<a class="dropdown-item" href="/admin/newShoe"
-								>Create New Shoe</a
-							>
+							<a class="dropdown-item" href="/admin/newShoe">Create New Shoe</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="/admin/editShoes"
-								>Edit Shoes</a
-							>
+							<a class="dropdown-item" href="/admin/editShoes">Edit Shoes</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="/admin/addadmin"
-								>Add Admins</a
-							>
+							<a class="dropdown-item" href="/admin/addadmin">Add Admins</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="/admin/orders"
-								>View Orders</a
-							>
+							<a class="dropdown-item" href="/admin/orders">View Orders</a>
 						</li>
 					</ul>
 				</li>
 				<% } %>
 			</ul>
-			<div class="d-flex">
-				<% if(!currentUser) {%>
-				<div class="login-wrapper me-3">
-					<img src="/Icons/user-icon.svg" alt="" />
-					<button class="btn login-btn">Login</button>
-				</div>
-				<div class="register-wrapper ms-3">
-					<img src="/Icons/register-icon.svg" alt="" />
-					<button class="btn register-btn">Register</button>
-				</div>
-				<% } %> <% if(currentUser){ %>
-				<form action="/logout" method="post">
-					<div class="me-3">
-						<img src="/Icons/logout.svg" alt="" />
-						<button class="btn register-btn" type="submit">Logout</button>
-					</div>
-				</form>
+			<% if(!currentUser) {%>
+			<div class="login-wrapper me-3">
+				<img src="/Icons/user-icon.svg" alt="" />
+				<button class="btn login-btn">Login</button>
+			</div>
+			<div class="register-wrapper ms-3">
+				<img src="/Icons/register-icon.svg" alt="" />
+				<button class="btn register-btn">Register</button>
+			</div>
+			<% } %> <% if(currentUser){ %>
+			<ul class="nav-item navbar-nav me-5">
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						id="navbarDropdownMenuLink"
+						role="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+					>
+						<img src="/Icons/user-icon.svg" alt="" class="me-2" />
 
-				<% } %>
+						<%= currentUser.firstName.toUpperCase() %>
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<li><a class="dropdown-item" href="/orders">Your Orders</a></li>
+						<li><a class="dropdown-item" href="/settings">Account Settings</a></li>
+						<li><hr class="dropdown-divider" /></li>
+						<li class="dropdown-item">
+							<form action="/logout" method="post">
+								<div class="me-3">
+									<img src="/Icons/logout.svg" alt="" />
+									<button class="btn register-btn" type="submit">Logout</button>
+								</div>
+							</form></li
+						>
+					</ul>
+				</li>
+			</ul>
+
+			<% } %>
+			<div class="nav-item">
 				<button class="cart-button">
 					<img src="/Icons/cart.svg" alt="" />
 				</button>

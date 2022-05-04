@@ -16,8 +16,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 //ISSUES:
-// Cart partial not displaying in admin edit shoes route
-// Cart not saving user cart on logout
+//Need to remove address path from user model when address is deleted
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
 	.then(() => {
@@ -55,6 +54,7 @@ app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
 	res.locals.cart = req.session.cart;
 	res.locals.total = req.session.cart;
+	req.session.returnTo = req.header("Referer");
 	next();
 });
 
@@ -316,7 +316,8 @@ app.post(
 		req.session.total = req.user.total;
 		const username = req.body.username[0].toUpperCase() + req.body.username.substring(1);
 		req.flash("success", `Welcome back, ${username}`);
-		res.redirect("/");
+		res.redirect(req.session.returnTo || "/");
+		delete req.session.returnTo;
 	}
 );
 
@@ -343,8 +344,10 @@ app.post("/register", async (req, res) => {
 		}
 		req.login(user, err => {
 			if (err) console.log(err);
+			let temp = req.session.returnTo;
+			delete req.session.returnTo;
 			req.flash("success", `Welcome, ${user.firstName}`);
-			return res.redirect("/");
+			return res.redirect(temp || "/");
 		});
 	} catch (err) {
 		req.flash("error", err.message);
@@ -378,19 +381,87 @@ app.post("/user/add/address", isLoggedIn, async (req, res) => {
 		const newUser = await User.findById(id).populate("addresses");
 		console.log(newUser);
 	});
-	res.redirect("/checkout");
+	res.redirect(req.session.returnTo || "/");
+	delete req.session.returnTo;
 });
 
 app.get("/checkout", isLoggedIn, async (req, res) => {
 	const cart = req.session.cart;
 	const total = req.session.total;
 	const addresses = await req.user.populate("addresses");
-	console.log(addresses);
-	const taxPercentage = getTaxPercentage(addresses.addresses[0].state);
-	const shippingFee = req.user.total > 50 ? 0 : 24.98;
-	const tax = req.user.total * taxPercentage;
-	const orderTotal = req.user.total + shippingFee + tax;
-	res.render("checkout", { total, cart, taxPercentage, shippingFee, tax, orderTotal });
+	console.log(addresses.addresses);
+	if (addresses.addresses.length) {
+		const taxPercentage = getTaxPercentage(addresses.addresses[0].state);
+		const shippingFee = req.user.total > 50 ? 0 : 24.98;
+		const tax = req.user.total * taxPercentage;
+		const orderTotal = req.user.total + shippingFee + tax;
+		res.render("checkout", { total, cart, taxPercentage, shippingFee, tax, orderTotal });
+	} else {
+		res.render("checkout", {
+			total,
+			cart,
+			taxPercentage: 0,
+			shippingFee: 0,
+			tax: 0,
+			orderTotal: 0,
+		});
+	}
+});
+
+app.get("/settings", isLoggedIn, (req, res) => {
+	res.render("settings");
+});
+
+app.post("/settings", isLoggedIn, async (req, res) => {
+	const userId = req.user._id;
+	const { firstName, lastName, phone, email } = req.body;
+	const user = await User.findByIdAndUpdate(userId, { firstName, lastName, phone, email });
+	req.flash("success", "Your account settings have been updated successfully!!");
+	res.redirect(req.session.returnTo || "/");
+});
+
+app.get("/settings/updateAddress", isLoggedIn, async (req, res) => {
+	// const addresses = req.user.addresses.populate("addresses");
+	const userAddresses = await req.user.populate("addresses");
+	// console.log(userAddresses.addresses);
+	res.render("updateAddress", { addresses: userAddresses.addresses });
+});
+
+app.get("/settings/updateAddress/:id", isLoggedIn, async (req, res) => {
+	const id = req.params.id;
+	const address = await Address.findById(id);
+	res.render("updateAddressForm", { address });
+});
+
+app.patch("/settings/updateAddress/:id", isLoggedIn, async (req, res) => {
+	const id = req.params.id;
+	const { address1, address2, city, state, zipCode } = req.body;
+	const address = await Address.findByIdAndUpdate(id, {
+		address1,
+		address2,
+		city,
+		state,
+		zipCode,
+	});
+	await address.save();
+	res.redirect("/settings/updateAddress");
+});
+
+app.delete("/settings/address/delete/:id", isLoggedIn, async (req, res) => {
+	const id = req.params.id;
+	const address = await Address.findByIdAndDelete(id);
+	req.flash("success", "Address Successfully Deleted");
+	res.redirect("/settings/updateAddress");
+});
+
+app.get("/orders", isLoggedIn, async (req, res) => {
+	const userOrders = await Order.where("user")
+		.equals(req.user._id)
+		.populate("items")
+		.populate("shippingAddress");
+	console.log(userOrders);
+	// console.log(userOrders[0].items);
+	res.render("orders", { userOrders });
 });
 
 app.post("/checkout", isLoggedIn, async (req, res) => {
@@ -415,22 +486,30 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 	// console.log(cartIds);
 	// console.log(req.user.total);
 	// console.log(req.user._id);
-	console.log(req.body.shippingAddress);
+	// console.log(req.body.shippingAddress);
 	const shippingAddressId = req.body.shippingAddress;
 	const address = await Address.findById(shippingAddressId);
 	const taxPercentage = getTaxPercentage(address.state);
 	const shippingFee = req.user.total > 50 ? 0 : 24.98;
 	const tax = req.user.total * taxPercentage;
 	const orderTotal = req.user.total + shippingFee + tax;
+	// console.log(address.address1);
 	const newOrder = new Order({
 		user: req.user._id,
-		shippingAddress: req.body.shippingAddress,
+		shippingAddress: {
+			address1: address.address1,
+			address2: address.address2,
+			city: address.city,
+			state: address.state,
+			zipCode: address.zipCode,
+		},
 		paymentMethod: req.body.paymentSelect,
 		items: cartIds,
 		itemsTotal: req.user.total.toFixed(2),
 		orderTax: tax.toFixed(2),
 		shippingCost: shippingFee.toFixed(2),
 		orderTotal: orderTotal.toFixed(2),
+		orderDate: new Date().toLocaleDateString(),
 	});
 	await newOrder.save();
 	req.user.cart = [];
@@ -443,7 +522,6 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 });
 
 app.get("/receipt/:id", isLoggedIn, async (req, res) => {
-	//TODO: redirect to this page from the checkout post and show order confirmation
 	const id = req.params.id;
 	const newOrder = await (await Order.findById(id).populate("items")).populate("shippingAddress");
 	console.log(newOrder);

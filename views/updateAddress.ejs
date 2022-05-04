@@ -1,0 +1,47 @@
+<%- layout("layout/boilerplate") %>
+
+<!-- Adding ability to update addresses. Needs Finished!! -->
+<main class="container container-fluid">
+	<h1>Update Addresses</h1>
+	<% if(addresses.length){ %> <% for(let address of addresses){ %>
+	<div class="container container-fluid border p-3">
+		<div class="d-flex justify-content-between">
+			<div class="d-flex p-3">
+				<div class="me-3">
+					<h4>Address: </h4>
+					<% if(address.address2.length){ %>
+					<h4><br /></h4>
+					<% } %>
+					<h4>City:</h4>
+					<h4>State:</h4>
+					<h4>Zip Code:</h4>
+				</div>
+				<div class="ms-3">
+					<h4><%= address.address1 %> </h4>
+					<% if(address.address2.length){ %>
+					<h4><%= address.address2 %> </h4>
+					<% } %>
+					<h4><%= address.city %> </h4>
+					<h4><%= address.state %> </h4>
+					<h4><%= address.zipCode %> </h4>
+				</div>
+			</div>
+			<div class="d-flex flex-column">
+				<form
+					action="/settings/address/delete/<%= address._id %>?_method=DELETE"
+					class="my-2"
+					method="post"
+				>
+					<button class="p-3 btn btn-danger">Delete Address</button>
+				</form>
+				<form action="/settings/updateAddress/<%= address._id %>" class="my-2">
+					<button class="p-3 btn btn-info">Update Address</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<% } %> <% } %>
+</main>
+
+<%- include("./partials/cart") %>
