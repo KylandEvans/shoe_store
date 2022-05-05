@@ -16,7 +16,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 //ISSUES:
-//Need to remove address path from user model when address is deleted
+
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
 	.then(() => {
@@ -95,7 +95,7 @@ const isAdmin = (req, res, next) => {
 	}
 };
 
-//functions
+//Functions
 
 function getTaxPercentage(state) {
 	switch (state) {
@@ -171,6 +171,7 @@ function getTaxPercentage(state) {
 	}
 }
 
+// Standard Routes
 app.get("/", (req, res) => {
 	const cart = req.session.cart;
 	const total = req.session.total;
@@ -366,7 +367,6 @@ app.post("/logout", (req, res) => {
 app.post("/user/add/address", isLoggedIn, async (req, res) => {
 	const { address1, address2, city, state, zipCode } = req.body;
 	const id = req.user._id;
-	console.log(address1, address2, city, state, zipCode);
 	const newAddress = new Address({
 		address1,
 		address2,
@@ -379,7 +379,6 @@ app.post("/user/add/address", isLoggedIn, async (req, res) => {
 		await user.addresses.push(newAddress._id);
 		await user.save();
 		const newUser = await User.findById(id).populate("addresses");
-		console.log(newUser);
 	});
 	res.redirect(req.session.returnTo || "/");
 	delete req.session.returnTo;
@@ -389,7 +388,6 @@ app.get("/checkout", isLoggedIn, async (req, res) => {
 	const cart = req.session.cart;
 	const total = req.session.total;
 	const addresses = await req.user.populate("addresses");
-	console.log(addresses.addresses);
 	if (addresses.addresses.length) {
 		const taxPercentage = getTaxPercentage(addresses.addresses[0].state);
 		const shippingFee = req.user.total > 50 ? 0 : 24.98;
@@ -421,9 +419,7 @@ app.post("/settings", isLoggedIn, async (req, res) => {
 });
 
 app.get("/settings/updateAddress", isLoggedIn, async (req, res) => {
-	// const addresses = req.user.addresses.populate("addresses");
 	const userAddresses = await req.user.populate("addresses");
-	// console.log(userAddresses.addresses);
 	res.render("updateAddress", { addresses: userAddresses.addresses });
 });
 
@@ -450,6 +446,14 @@ app.patch("/settings/updateAddress/:id", isLoggedIn, async (req, res) => {
 app.delete("/settings/address/delete/:id", isLoggedIn, async (req, res) => {
 	const id = req.params.id;
 	const address = await Address.findByIdAndDelete(id);
+	const user = await User.findById(req.user._id);
+	const userAddresses = user.addresses;
+	for (let i = 0; i < userAddresses.length; i++) {
+		if (address._id.toString() === userAddresses[i].toString()) {
+			userAddresses.splice(i, 1);
+		}
+	}
+	user.save();
 	req.flash("success", "Address Successfully Deleted");
 	res.redirect("/settings/updateAddress");
 });
@@ -457,16 +461,15 @@ app.delete("/settings/address/delete/:id", isLoggedIn, async (req, res) => {
 app.get("/orders", isLoggedIn, async (req, res) => {
 	const userOrders = await Order.where("user")
 		.equals(req.user._id)
-		.populate("items")
+		.populate({
+			path: "items",
+			populate: { path: "item" },
+		})
 		.populate("shippingAddress");
-	console.log(userOrders);
-	// console.log(userOrders[0].items);
 	res.render("orders", { userOrders });
 });
 
 app.post("/checkout", isLoggedIn, async (req, res) => {
-	//TODO: Need to add validations
-	// console.log(req.body);
 	if (!req.body.shippingAddress) {
 		req.flash("error", "Please select a shipping address!");
 		res.redirect("/checkout");
@@ -479,21 +482,24 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 		req.flash("error", "Can't submit order without any items!");
 		res.redirect("/checkout");
 	}
-	const cartIds = [];
-	for (let i = 0; i < req.user.cart.length; i++) {
-		cartIds.push(req.user.cart[i].shoe._id);
+	class Item {
+		constructor(item, size) {
+			this.item = item;
+			this.size = size;
+		}
 	}
-	// console.log(cartIds);
-	// console.log(req.user.total);
-	// console.log(req.user._id);
-	// console.log(req.body.shippingAddress);
+	const cartItems = [];
+	for (let i = 0; i < req.user.cart.length; i++) {
+		let item = new Item(req.user.cart[i].shoe._id, req.user.cart[i].size);
+		cartItems.push(item);
+	}
+	console.log(cartItems[0]);
 	const shippingAddressId = req.body.shippingAddress;
 	const address = await Address.findById(shippingAddressId);
 	const taxPercentage = getTaxPercentage(address.state);
 	const shippingFee = req.user.total > 50 ? 0 : 24.98;
 	const tax = req.user.total * taxPercentage;
 	const orderTotal = req.user.total + shippingFee + tax;
-	// console.log(address.address1);
 	const newOrder = new Order({
 		user: req.user._id,
 		shippingAddress: {
@@ -504,7 +510,7 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 			zipCode: address.zipCode,
 		},
 		paymentMethod: req.body.paymentSelect,
-		items: cartIds,
+		items: cartItems,
 		itemsTotal: req.user.total.toFixed(2),
 		orderTax: tax.toFixed(2),
 		shippingCost: shippingFee.toFixed(2),
@@ -516,14 +522,18 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 	req.session.cart = [];
 	req.user.save();
 	const orderId = newOrder;
-	// console.log(orderId._id);
 	req.flash("success", "Thank you for your order!");
 	res.redirect(`/receipt/${orderId._id}`);
 });
 
 app.get("/receipt/:id", isLoggedIn, async (req, res) => {
 	const id = req.params.id;
-	const newOrder = await (await Order.findById(id).populate("items")).populate("shippingAddress");
+	const newOrder = await (
+		await Order.findById(id).populate({
+			path: "items",
+			populate: { path: "item" },
+		})
+	).populate("shippingAddress");
 	console.log(newOrder);
 	res.render("receipt", { newOrder });
 });
@@ -583,28 +593,31 @@ app.delete("/admin/edit/:id", isLoggedIn, isAdmin, async (req, res) => {
 	res.redirect("/");
 });
 
-app.get("/admin/addadmin", isLoggedIn, isAdmin, (req, res) => {
-	//TODO: Add response to render add admin page
-	res.send("This is the get route to get the add admin page");
+app.get("/admin/orders", isLoggedIn, isAdmin, async (req, res) => {
+	//TODO: Finish template activeOrders.ejs
+	const activeOrders = await Order.find({ orderStatus: "active" })
+		.populate("user")
+		.populate({
+			path: "items",
+			populate: { path: "item" },
+		});
+	res.render("admin/activeOrders", { activeOrders });
 });
 
-app.get("/admin/addadmin/:q", isLoggedIn, isAdmin, async (req, res) => {
-	//TODO: add logic to search database based on query string and render results page
-	res.send("This is the get route to return the DB query to add a new admin");
+app.get("/admin/orders/all", isLoggedIn, isAdmin, async (req, res) => {
+	//TODO: Finish template allOrders.ejs
+	const allOrders = await Order.find()
+		.populate("user")
+		.populate({
+			path: "items",
+			populate: { path: "item" },
+		});
+	res.render("admin/allOrders", { allOrders });
 });
 
-app.patch("/admin/addadmin", isLoggedIn, isAdmin, (req, res) => {
-	//TODO: Add logic to add a new admin
-});
-
-app.get("/admin/orders", isLoggedIn, isAdmin, (req, res) => {
-	//TODO: Add response to list all of the orders
-	res.send("This is the page that will list all of the different orders");
-});
-
-app.get("/admin/orders/:id", isLoggedIn, isAdmin, (req, res) => {
-	//TODO: Add response with specific order details about the order
-	res.send("This will show details about a specific order");
+app.post("/admin/orders/updateStatus/:id", isLoggedIn, isAdmin, async (req, res) => {
+	const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus: "complete" });
+	res.redirect(req.session.returnTo || "/");
 });
 
 app.listen(port, () => {

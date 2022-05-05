@@ -42,11 +42,18 @@ const orderSchema = new mongoose.Schema({
 	},
 	items: [
 		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Product",
-			required: true,
+			item: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Product",
+				required: true,
+			},
+			size: {
+				type: Number,
+				required: true,
+			},
 		},
 	],
+
 	itemsTotal: {
 		type: Number,
 		required: true,

@@ -1,0 +1,44 @@
+<%- layout("layout/boilerplate") %>
+
+<main class="container container-fluid">
+	<% for(let order of activeOrders){ %>
+	<div class="border my-3">
+		<% for(let items of order.items){ %>
+		<div class="d-flex px-3 mt-3">
+			<div class="h-25 w-25">
+				<img src="<%= items.item.image %> " alt="" class="h-50 w-50 img-thumbnail" />
+			</div>
+			<div class="d-flex flex-column">
+				<div> <%= items.item.name %> </div>
+				<div class="text-muted"><%= items.item.subTitle %></div>
+				<div>Size: <%= items.size %> </div>
+			</div>
+		</div>
+		<% } %>
+		<div class="p-3">
+			<div>
+				<h4 class="border-bottom">Shipping Address: </h4>
+				<h5><%= order.shippingAddress.address1 %></h5>
+				<% if(order.shippingAddress.address2){ %>
+				<h5><%= order.shippingAddress.address2 %> </h5>
+				<% } %>
+				<h5><%= order.shippingAddress.city %></h5>
+				<h5><%= order.shippingAddress.state %></h5>
+				<h5><%= order.shippingAddress.zipCode %></h5>
+			</div>
+		</div>
+		<div class="p-3">
+			<h4 class="border-bottom">Customer Information: </h4>
+			<h5
+				><%= order.user.firstName[0].toUpperCase() + order.user.firstName.substring(1) %> <%=
+				order.user.lastName[0].toUpperCase() + order.user.lastName.substring(1) %>
+			</h5>
+			<h5><%= order.user.phone %></h5>
+			<h5><%= order.user.email %></h5>
+		</div>
+		<form action="/admin/orders/updateStatus/<%= order._id %>" method="post">
+			<button class="btn btn-primary m-3">Mark order Complete</button>
+		</form>
+	</div>
+	<% } %>
+</main>

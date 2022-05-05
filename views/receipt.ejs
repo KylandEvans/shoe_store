@@ -37,18 +37,19 @@
 	<% newOrder.items.forEach(item => { %>
 	<div class="row">
 		<div class="col-3 w-25">
-			<img src="<%= item.image %>" alt="" class="img-thumbnail h-50" />
+			<img src="<%= item.item.image %>" alt="" class="img-thumbnail h-50" />
 		</div>
 		<div class="col-6">
-			<h3><%= item.name %></h3>
-			<h6><%= item.subTitle %></h6>
-			<h6>$ <%= item.price %></h6>
+			<h3><%= item.item.name %></h3>
+			<h6><%= item.item.subTitle %></h6>
+			<h6>Size: <%= item.size %> </h6>
+			<h6>$ <%= item.item.price.toFixed(2) %></h6>
 		</div>
 	</div>
 
 	<% }) %>
 
-	<a href="/" class="btn btn-primary">Browse more products</a>
+	<a href="/" class="btn btn-primary mb-5">Browse more products</a>
 </main>
 
 <%- include("./partials/cart") %>
