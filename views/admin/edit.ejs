@@ -1,8 +1,7 @@
 <%- layout("layout/boilerplate") %>
 
 <main>
-	<h1>Shop for your next style</h1>
-	<div class="container">
+	<div class="container my-5">
 		<div class="row row-cols-4 gx-5 gy-5">
 			<% for(let product of products) {%>
 			<span class="col-12 col-md-6 col-lg-4 col-xl-3 shoe-link" href="/shoes/<%= product._id %>">

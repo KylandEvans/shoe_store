@@ -1,64 +1,129 @@
 <%- layout("layout/boilerplate") %>
 <h1>Add New Shoe</h1>
 
-<form action="/admin/newShoe" method="POST" class="form-control px-5">
+<% if(issues && issues.length){ %>
+<div class="container bg-danger">
+	<% for(let issue of issues){ %>
+	<p><%= issue %> </p>
+	<% } %>
+</div>
+<% } %>
+
+<form action="/admin/newShoe" method="POST" class="form-control px-5 new-shoe-form">
 	<label for="name">Name: </label>
-	<input type="text" name="name" id="name" class="form-control" placeholder="Name of Shoe" />
+	<input
+		type="text"
+		name="name"
+		id="name"
+		class="form-control text-field"
+		placeholder="Name of Shoe"
+	/>
+	<div class="d-none issue-span">
+		<span class="text-danger">Name field cannot be empty!</span>
+	</div>
 	<label for="subtitle">Subtitle: </label>
 	<input
 		type="text"
 		name="subTitle"
 		id="subtitle"
-		class="form-control"
+		class="form-control text-field"
 		placeholder="i.e. 'Men's running shoes'"
 	/>
+	<div class="d-none issue-span">
+		<span class="text-danger">Subtitle field cannot be empty!</span>
+	</div>
 	<label for="price">Price: </label>
 	<input
 		type="number"
 		name="price"
 		id="price"
 		placeholder="Price of Shoe"
-		class="form-control"
+		class="form-control price-field"
 		step="0.01"
 	/>
+	<div class="d-none price-issue-span">
+		<span class="text-danger">Price field cannot be empty and must be greater than zero!</span>
+	</div>
 	<label for="brand">Brand: </label>
 	<input
 		type="text"
 		name="brand"
 		id="brand"
 		placeholder="i.e. 'Nike', 'Puma', etc.."
-		class="form-control"
+		class="form-control text-field"
 	/>
+	<div class="d-none issue-span">
+		<span class="text-danger">Brand field cannot be empty!</span>
+	</div>
 	<label for="gender">Gender: </label>
 	<select name="gender" id="gender" class="form-select">
 		<option value="men">Men</option>
 		<option value="woman">Woman</option>
 	</select>
 	<label for="image">Image: </label>
-	<input type="text" name="image" id="image" class="form-control" placeholder="Image of Shoe" />
+	<input
+		type="text"
+		name="image"
+		id="image"
+		class="form-control text-field"
+		placeholder="Image of Shoe"
+	/>
+	<div class="d-none issue-span">
+		<span class="text-danger">Image field cannot be empty!</span>
+	</div>
 	<h3>Choose Sizes Avlible</h3>
 	<div class="sizes-wrapper container">
 		<div class="row">
 			<!-- group-1 -->
 			<div class="form-group col-4">
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="6" id="6-check" />
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="6"
+						id="6-check"
+						name="size[]"
+					/>
 					<label class="form-check-label" for="6-check">6</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="6.5" id="6.5-check" />
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="6.5"
+						id="6.5-check"
+						name="size[]"
+					/>
 					<label class="form-check-label" for="6.5-check">6.5</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="7" id="7-check" />
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="7"
+						id="7-check"
+						name="size[]"
+					/>
 					<label class="form-check-label" for="7-check">7</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="7.5" id="7.5-check" />
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="7.5"
+						id="7.5-check"
+						name="size[]"
+					/>
 					<label class="form-check-label" for="7.5-check">7.5</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="8" id="8-check" />
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value="8"
+						id="8-check"
+						name="size[]"
+					/>
 					<label class="form-check-label" for="8-check">8</label>
 				</div>
 			</div>
@@ -172,14 +237,77 @@
 			</div>
 		</div>
 	</div>
+	<div class="d-none size-issue-span">
+		<span class="text-danger">Must select at leat one size!</span>
+	</div>
+
 	<div class="form-control d-flex flex-column mt-3">
 		<label for="description">Description</label>
-		<textarea name="description" id="description" cols="100" rows="5"></textarea>
+		<textarea
+			name="description"
+			id="description"
+			cols="100"
+			rows="5"
+			class="text-field"
+		></textarea>
+	</div>
+	<div class="d-none issue-span">
+		<span class="text-danger">Description field cannot be empty!</span>
 	</div>
 	<div class="my-3">
-		<button class="btn btn-primary" type="submit">Make New Shoe</button>
+		<button class="btn btn-primary submit-new-shoe-button" type="button">Make New Shoe</button>
 		<button class="btn btn-warning" type="reset">Clear the Form</button>
 	</div>
 </form>
 
 <%- include("../partials/cart") %>
+
+<script>
+	const textFields = document.querySelectorAll(".text-field");
+	const priceField = document.querySelector(".price-field");
+	const submitNewShoeButton = document.querySelector(".submit-new-shoe-button");
+	const issueSpans = document.querySelectorAll(".issue-span");
+	const priceSpan = document.querySelector(".price-issue-span");
+	const sizeChecks = document.querySelectorAll(".form-check-input");
+	const sizeIssueSpan = document.querySelector(".size-issue-span");
+	const newShoeForm = document.querySelector(".new-shoe-form");
+
+	submitNewShoeButton.addEventListener("click", () => {
+		for (let i = 0; i < textFields.length; i++) {
+			if (!textFields[i].value) {
+				issueSpans[i].classList.remove("d-none");
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				return;
+			} else {
+				if (!issueSpans[i].classList.contains("d-none")) {
+					issueSpans[i].classList.add("d-none");
+				}
+			}
+		}
+		if (!priceField.value || priceField.value <= 0) {
+			priceSpan.classList.remove("d-none");
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
+			return;
+		} else {
+			if (!priceSpan.classList.contains("d-none")) {
+				priceSpan.classList.add("d-none");
+			}
+		}
+		let checks = 0;
+		for (let i = 0; i < sizeChecks.length; i++) {
+			if (sizeChecks[i].checked == true) {
+				checks += 1;
+			}
+		}
+		if (checks <= 0) {
+			sizeIssueSpan.classList.remove("d-none");
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
+			return;
+		} else {
+			if (!sizeIssueSpan.classList.contains("d-none")) {
+				sizeIssueSpan.classList.add("d-none");
+			}
+		}
+		newShoeForm.submit();
+	});
+</script>

@@ -18,8 +18,7 @@ const LocalStrategy = require("passport-local").Strategy;
 //ISSUES:
 
 //TODO:'s
-// Add validations to login and Register forms.
-// Forms need to properly validate that fields are not empty and that the infromation in them is good.
+// Add front-end and back-end validations to Register form
 // Add actual shoe information to pages.
 // Add email to be sent when user registers and when order is placed.
 // Finish Home page styles
@@ -176,6 +175,33 @@ function getTaxPercentage(state) {
 		default:
 			return 0;
 	}
+}
+
+function validateAdminNewShoe(shoe, issues) {
+	console.log(shoe);
+
+	if (!shoe.name.length) {
+		issues.push("Name field cannot be empty!");
+	}
+	if (!shoe.subTitle.length) {
+		issues.push("Subtitle field cannot be empty!");
+	}
+	if (!shoe.price.length) {
+		issues.push("Price field cannot be empty!");
+	}
+	if (shoe.price <= 0) {
+		issues.push("Price cannot be less than zero!");
+	}
+	if (!shoe.image.length) {
+		issues.push("Image field cannot be empty!");
+	}
+	if (!shoe.size) {
+		issues.push("Must select at least one size!");
+	}
+	if (!shoe.description) {
+		issues.push("Description field cannot be empty!");
+	}
+	return issues;
 }
 
 // Standard Routes
@@ -348,7 +374,6 @@ app.post("/register", async (req, res) => {
 			});
 			registeredUser.total = req.session.total;
 			registeredUser.save();
-			console.log(req.session.cart);
 		}
 		req.login(user, err => {
 			if (err) console.log(err);
@@ -500,7 +525,6 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 		let item = new Item(req.user.cart[i].shoe._id, req.user.cart[i].size);
 		cartItems.push(item);
 	}
-	console.log(cartItems[0]);
 	const shippingAddressId = req.body.shippingAddress;
 	const address = await Address.findById(shippingAddressId);
 	const taxPercentage = getTaxPercentage(address.state);
@@ -541,29 +565,35 @@ app.get("/receipt/:id", isLoggedIn, async (req, res) => {
 			populate: { path: "item" },
 		})
 	).populate("shippingAddress");
-	console.log(newOrder);
 	res.render("receipt", { newOrder });
 });
 
 app.get("/admin/newShoe", isLoggedIn, isAdmin, (req, res) => {
-	res.render("admin/new");
+	let issues = [];
+	res.render("admin/new", { issues });
 });
 
 app.post("/admin/newShoe", isLoggedIn, isAdmin, async (req, res) => {
-	const { name, subTitle, price, gender, image, size, description } = req.body;
-	const brand = req.body.brand.toLowerCase();
-	const product = new Product({
-		name,
-		subTitle,
-		price,
-		brand,
-		gender,
-		image,
-		size,
-		description,
-	});
-	await product.save();
-	res.redirect("/admin/newShoe");
+	let issues = [];
+	validateAdminNewShoe(req.body, issues);
+	if (issues.length) {
+		res.render("admin/new", { issues });
+	} else {
+		const { name, subTitle, price, gender, image, size, description } = req.body;
+		const brand = req.body.brand.toLowerCase();
+		const product = new Product({
+			name,
+			subTitle,
+			price,
+			brand,
+			gender,
+			image,
+			size,
+			description,
+		});
+		await product.save();
+		res.redirect("/admin/newShoe");
+	}
 });
 
 app.get("/admin/editShoes", isLoggedIn, isAdmin, async (req, res) => {

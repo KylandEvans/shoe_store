@@ -4,17 +4,17 @@
 	<form
 		action="/admin/edit/<%= shoe._id %>?_method=PATCH"
 		method="post"
-		class="form-control"
+		class="form-control edit-shoe-form"
 	>
    <div class="d-block h-auto w-auto align-middle">
       <img src="<%= shoe.image %>" alt="" class="img-fluid img-thumbnail h-25 w-25">
    </div>
 
 		<!-- Name -->
-		<div class="form-floating mb-3">
+		<div class="form-floating mt-3">
 			<input
 				type="text"
-				class="form-control form-control-lg"
+				class="form-control form-control-lg edit-field"
 				id="editName"
 				placeholder="Edit Name of Shoe"
 				name="name"
@@ -22,12 +22,15 @@
 			/>
 			<label for="editName">Edit Name of Shoe</label>
 		</div>
+		<span class="m-3 w-100 d-none issue-span text-danger">Name field cannot be empty!</span>
+		<span class="m-3 w-100 d-none success-span text-success">Everything looks good here!</span>
+
 
 		<!-- Subtitle -->
-		<div class="form-floating mb-3">
+		<div class="form-floating mt-3">
 			<input
 				type="text"
-				class="form-control form-control-lg"
+				class="form-control form-control-lg edit-field"
 				id="editSubtitle"
 				placeholder="Edit Subtitle of Shoe"
 				name="subTitle"
@@ -35,12 +38,14 @@
 			/>
 			<label for="editSubtitle">Edit Subtitle of Shoe</label>
 		</div>
+		<span class="m-3 w-100 d-none issue-span text-danger">Subtitle field cannot be empty!</span>
+		<span class="m-3 w-100 d-none success-span text-success">Everything looks good here!</span>
 
 		<!-- Brand -->
-		<div class="form-floating mb-3">
+		<div class="form-floating mt-3">
 			<input
 				type="text"
-				class="form-control form-control-lg"
+				class="form-control form-control-lg edit-field"
 				id="editBrand"
 				placeholder="Edit Brand of Shoe"
 				name="brand"
@@ -48,9 +53,11 @@
 			/>
 			<label for="editBrand">Edit Brand of Shoe</label>
 		</div>
+		<span class="m-3 w-100 d-none issue-span text-danger">Brand field cannot be empty!</span>
+		<span class="m-3 w-100 d-none success-span text-success">Everything looks good here!</span>
 
 		<!-- Gender -->
-		<div class="form-floating mb-3">
+		<div class="form-floating mt-3">
 			<select name="gender" id="gender" class="form-select form-select-lg">
 				<option value="men" <%= shoe.gender === "men" ? "selected": "" %>>Men</option>
 				<option value="women"<%= shoe.gender === "women" ? "selected": "" %>>Women</option>
@@ -59,10 +66,10 @@
 		</div>
 
 		<!-- Price -->
-		<div class="form-floating mb-3">
+		<div class="form-floating mt-3">
 			<input
 				type="number"
-				class="form-control form-control-lg"
+				class="form-control form-control-lg edit-price"
 				id="editPrice"
 				placeholder="Edit Price of Shoe"
 				name="price"
@@ -71,25 +78,69 @@
 			/>
 			<label for="editPrice">Edit Price of Shoe</label>
 		</div>
+		<span class="m-3 w-100 d-none issue-price text-danger">Price field cannot be empty and mut be greater than zero!</span>
+		<span class="m-3 w-100 d-none success-price text-success">Everything looks good here!</span>
       
       <!-- Size -->
-      <div class="form-control mb-3">
+      <div class="form-control mt-3">
          <% for(let i = 6; i <= 13; i+= 0.5){ %> 
-            <input type="checkbox" name="size[]" id="size-<%= i %>" 
+            <input type="checkbox" name="size[]" id="size-<%= i %>" class="size"
             <%= shoe.size.includes(i) ? "checked": "" %> value="<%= i %>">
             <label for="size-<%= i %>" class="me-3"><%= i %></label>
          <% } %> 
 		</div>
 
       <!-- Description -->
-      <div class="form-control d-flex flex-column">
+      <div class="form-control d-flex flex-column mt-3">
          <label for="description">Edit Description</label>
-         <textarea name="description" id="description" cols="100" rows="5" placeholder="Edit Description of Shoe"><%= shoe.description %></textarea>
+         <textarea name="description" id="description" cols="100" rows="5" placeholder="Edit Description of Shoe" class="edit-field"><%= shoe.description %></textarea>
       </div>
-      <div>
-         <button class="btn btn-primary mt-3">Save Changes</button>
+		<span class="m-3 w-100 d-none issue-span text-danger">Description cannot be empty!</span>
+		<span class="m-3 w-100 d-none success-span text-success">Everything looks good here!</span>
+
+		<!-- Submit Button -->
+      <div class="mt-3">
+         <button class="btn btn-primary mt-3 edit-shoe-submit-button" type="button">Save Changes</button>
       </div>
 	</form>
 </div>
 
 <%- include("../partials/cart") %>
+
+<script>
+	const editFields = document.querySelectorAll(".edit-field")
+	const editPrice = document.querySelector(".edit-price")
+	const editShoeForm = document.querySelector(".edit-shoe-form")
+	const issueSpans = document.querySelectorAll(".issue-span")
+	const successSpans = document.querySelectorAll(".success-span")
+	const issuePrice = document.querySelector(".issue-price")
+	const successPrice = document.querySelector(".success-price")
+	const editShoeSubmitButton = document.querySelector(".edit-shoe-submit-button")
+
+	editShoeSubmitButton.addEventListener('click', () => {
+		for(let i = 0; i < editFields.length; i++) {
+			if(!editFields[i].value){
+				issueSpans[i].classList.remove('d-none')
+				successSpans[i].classList.add('d-none')
+				return
+			}
+			if(editFields[i].value){
+				successSpans[i].classList.remove('d-none')
+				issueSpans[i].classList.add('d-none')
+			}
+			if(!editPrice.value || editPrice.value <= 0){
+				issuePrice.classList.remove('d-none')
+				successPrice.classList.add('d-none')
+				return
+			}
+			if(editPrice.value && editPrice.value > 0){
+				issuePrice.classList.add('d-none')
+				successPrice.classList.remove('d-none')
+			}
+		}
+		editShoeForm.submit()
+
+	})
+
+
+</script>

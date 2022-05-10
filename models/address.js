@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
-	.then(() => {
-		console.log("Mongo Connected!!");
-	})
+	.then(() => {})
 	.catch(e => {
 		console.log("Mongo Connection Failed!!");
 		console.log(e);
