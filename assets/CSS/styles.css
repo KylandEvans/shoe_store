@@ -173,3 +173,12 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
 	-moz-appearance: textfield;
 }
+
+@media (max-width: 768px) {
+	.footer {
+		flex-direction: column;
+	}
+	.footer-link {
+		padding: 10px 0;
+	}
+}

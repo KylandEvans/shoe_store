@@ -3,13 +3,7 @@
 
 <form action="/admin/newShoe" method="POST" class="form-control px-5">
 	<label for="name">Name: </label>
-	<input
-		type="text"
-		name="name"
-		id="name"
-		class="form-control"
-		placeholder="Name of Shoe"
-	/>
+	<input type="text" name="name" id="name" class="form-control" placeholder="Name of Shoe" />
 	<label for="subtitle">Subtitle: </label>
 	<input
 		type="text"
@@ -41,61 +35,30 @@
 		<option value="woman">Woman</option>
 	</select>
 	<label for="image">Image: </label>
-	<input
-		type="text"
-		name="image"
-		id="image"
-		class="form-control"
-		placeholder="Image of Shoe"
-	/>
+	<input type="text" name="image" id="image" class="form-control" placeholder="Image of Shoe" />
 	<h3>Choose Sizes Avlible</h3>
 	<div class="sizes-wrapper container">
 		<div class="row">
 			<!-- group-1 -->
 			<div class="form-group col-4">
 				<div class="form-check">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						value="6"
-						id="6-check"
-					/>
+					<input class="form-check-input" type="checkbox" value="6" id="6-check" />
 					<label class="form-check-label" for="6-check">6</label>
 				</div>
 				<div class="form-check">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						value="6.5"
-						id="6.5-check"
-					/>
+					<input class="form-check-input" type="checkbox" value="6.5" id="6.5-check" />
 					<label class="form-check-label" for="6.5-check">6.5</label>
 				</div>
 				<div class="form-check">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						value="7"
-						id="7-check"
-					/>
+					<input class="form-check-input" type="checkbox" value="7" id="7-check" />
 					<label class="form-check-label" for="7-check">7</label>
 				</div>
 				<div class="form-check">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						value="7.5"
-						id="7.5-check"
-					/>
+					<input class="form-check-input" type="checkbox" value="7.5" id="7.5-check" />
 					<label class="form-check-label" for="7.5-check">7.5</label>
 				</div>
 				<div class="form-check">
-					<input
-						class="form-check-input"
-						type="checkbox"
-						value="8"
-						id="8-check"
-					/>
+					<input class="form-check-input" type="checkbox" value="8" id="8-check" />
 					<label class="form-check-label" for="8-check">8</label>
 				</div>
 			</div>
@@ -211,15 +174,12 @@
 	</div>
 	<div class="form-control d-flex flex-column mt-3">
 		<label for="description">Description</label>
-		<textarea
-			name="description"
-			id="description"
-			cols="100"
-			rows="5"
-		></textarea>
+		<textarea name="description" id="description" cols="100" rows="5"></textarea>
 	</div>
 	<div class="my-3">
 		<button class="btn btn-primary" type="submit">Make New Shoe</button>
 		<button class="btn btn-warning" type="reset">Clear the Form</button>
 	</div>
 </form>
+
+<%- include("../partials/cart") %>

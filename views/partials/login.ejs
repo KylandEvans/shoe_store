@@ -11,12 +11,12 @@
 				></button>
 			</div>
 			<div class="modal-body">
-				<form action="/login" class="form-control" method="post">
-					<label for="username">Username:</label>
+				<form action="/login" class="form-control loginForm" method="post" name="loginForm">
+					<label for="loginUsername">Username:</label>
 					<input
 						type="text"
 						name="username"
-						id="username"
+						id="loginUsername"
 						class="form-control login-username-input"
 						autocomplete="username"
 					/>
@@ -25,20 +25,42 @@
 						type="password"
 						name="password"
 						id="loginPassword"
-						class="form-control"
+						class="form-control login-password-input"
 					/>
 					<div class="modal-footer">
-						<button
-							type="reset"
-							class="btn btn-secondary"
-							data-bs-dismiss="modal"
-						>
-							Clear
-						</button>
-						<button class="btn btn-primary" type="submit">Login</button>
+						<div>
+							<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
+								Clear
+							</button>
+							<button class="btn btn-primary login-button" type="submit">Login</button>
+						</div>
+						<div>
+							<button type="button" class="btn btn-dark admin-login">Login as Admin</button>
+							<button type="button" class="btn btn-dark guest-login">Login as Guest</button>
+						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+	const adminLoginButton = document.querySelector(".admin-login");
+	const guestLoginButton = document.querySelector(".guest-login");
+	const usernameField = document.querySelector(".login-username-input");
+	const passwordField = document.querySelector(".login-password-input");
+	const form = document.querySelector(".loginForm");
+
+	adminLoginButton.addEventListener("click", () => {
+		usernameField.value = "admin";
+		passwordField.value = "admin";
+		form.submit();
+	});
+
+	guestLoginButton.addEventListener("click", () => {
+		usernameField.value = "guest";
+		passwordField.value = "guest";
+		form.submit();
+	});
+</script>

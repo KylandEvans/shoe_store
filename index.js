@@ -17,6 +17,13 @@ const LocalStrategy = require("passport-local").Strategy;
 
 //ISSUES:
 
+//TODO:'s
+// Add validations to login and Register forms.
+// Forms need to properly validate that fields are not empty and that the infromation in them is good.
+// Add actual shoe information to pages.
+// Add email to be sent when user registers and when order is placed.
+// Finish Home page styles
+// Ensure all pages are mobile friendly
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
 	.then(() => {
@@ -594,7 +601,6 @@ app.delete("/admin/edit/:id", isLoggedIn, isAdmin, async (req, res) => {
 });
 
 app.get("/admin/orders", isLoggedIn, isAdmin, async (req, res) => {
-	//TODO: Finish template activeOrders.ejs
 	const activeOrders = await Order.find({ orderStatus: "active" })
 		.populate("user")
 		.populate({
@@ -605,7 +611,6 @@ app.get("/admin/orders", isLoggedIn, isAdmin, async (req, res) => {
 });
 
 app.get("/admin/orders/all", isLoggedIn, isAdmin, async (req, res) => {
-	//TODO: Finish template allOrders.ejs
 	const allOrders = await Order.find()
 		.populate("user")
 		.populate({
@@ -613,6 +618,18 @@ app.get("/admin/orders/all", isLoggedIn, isAdmin, async (req, res) => {
 			populate: { path: "item" },
 		});
 	res.render("admin/allOrders", { allOrders });
+});
+
+app.get("/tos", (req, res) => {
+	res.render("termsOfService");
+});
+
+app.get("/tou", (req, res) => {
+	res.render("termsOfUsage");
+});
+
+app.get("/privacy", (req, res) => {
+	res.render("privacyPolicy");
 });
 
 app.post("/admin/orders/updateStatus/:id", isLoggedIn, isAdmin, async (req, res) => {

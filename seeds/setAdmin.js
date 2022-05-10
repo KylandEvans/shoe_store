@@ -13,7 +13,7 @@ mongoose
 
 const setAdmin = async () => {
 	const user = await User.findOneAndUpdate({
-		username: "kyland",
+		username: "admin",
 		isAdmin: true,
 	});
 };

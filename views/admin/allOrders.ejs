@@ -16,6 +16,49 @@
 		</div>
 		<% } %>
 		<div class="p-3"> Status: <%= order.orderStatus %> </div>
+		<div class="m-3">
+			<h4 class="border-bottom">Shipping Address: </h4>
+		</div>
+		<div class="m-3 d-flex w-25 justify-content-between">
+			<div>
+				<h5 class="fw-bold">Address: </h5>
+				<% if(order.shippingAddress.address2){ %>
+				<h5>&nbsp;</h5>
+				<% } %>
+				<h5 class="fw-bold">City: </h5>
+				<h5 class="fw-bold">State:</h5>
+				<h5 class="fw-bold">Zip Code:</h5>
+			</div>
+			<div>
+				<h5><%= order.shippingAddress.address1 %></h5>
+				<% if(order.shippingAddress.address2){ %>
+				<h5><%= order.shippingAddress.address2 %> </h5>
+				<% } %>
+				<h5><%= order.shippingAddress.city %> </h5>
+				<h5><%= order.shippingAddress.state %> </h5>
+				<h5><%= order.shippingAddress.zipCode %> </h5>
+			</div>
+		</div>
+		<div class="m-3">
+			<h4 class="border-bottom">Customer Information: </h4>
+		</div>
+		<div class="m-3 d-flex w-25 justify-content-between">
+			<div>
+				<h5 class="fw-bold">Name: </h5>
+				<h5 class="fw-bold">Phone Number: </h5>
+				<h5 class="fw-bold">Email:</h5>
+			</div>
+			<div>
+				<h5
+					><%= order.user.firstName.toUpperCase() + " " + order.user.lastName.toUpperCase()
+					%></h5
+				>
+				<h5><%= order.user.phone %> </h5>
+				<h5><%= order.user.email %> </h5>
+			</div>
+		</div>
 	</div>
 	<% } %>
 </main>
+
+<%- include("../partials/cart") %>

@@ -5,10 +5,7 @@
 	<div class="container">
 		<div class="row row-cols-4 gx-5 gy-5">
 			<% for(let product of products) {%>
-			<span
-				class="col-12 col-md-6 col-lg-4 col-xl-3 shoe-link"
-				href="/shoes/<%= product._id %>"
-			>
+			<span class="col-12 col-md-6 col-lg-4 col-xl-3 shoe-link" href="/shoes/<%= product._id %>">
 				<img src="<%= product.image %>" alt="" class="img-fluid" />
 				<h4><%= product.name %></h4>
 				<h6 class="text-muted"><%= product.subTitle %></h6>
@@ -17,14 +14,8 @@
 					<form action="/admin/editShoes/<%= product._id %>" class="m-2">
 						<button class="btn-info btn">EDIT</button>
 					</form>
-					<form
-						action="/admin/edit/<%= product._id %>?_method=DELETE"
-						method="post"
-					>
-						<button
-							class="btn btn-danger m-2 admin-delete-button"
-							type="submit"
-						>
+					<form action="/admin/edit/<%= product._id %>?_method=DELETE" method="post">
+						<button class="btn btn-danger m-2 admin-delete-button" type="submit">
 							DELETE
 						</button>
 					</form>
@@ -32,6 +23,6 @@
 			</span>
 			<% } %>
 		</div>
-		<%% include("../partials/cart") %>
+		<%- include("../partials/cart") %>
 	</div>
 </main>
