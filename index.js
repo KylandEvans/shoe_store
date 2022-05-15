@@ -20,7 +20,6 @@ const LocalStrategy = require("passport-local").Strategy;
 //TODO:'s
 // Add back-end validations to Register form. Use index.js && register.ejs
 // Add email to be sent when user registers and when order is placed.
-// Ensure all pages are mobile friendly
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
 	.then(() => {

@@ -12,6 +12,26 @@ body {
 	width: 100vw;
 }
 
+.home-page-main {
+	background-image: url("../shoe_images/yoga_image_home_page.jpg");
+	height: 80vh;
+}
+
+.scroll-x {
+	overflow-x: scroll;
+}
+
+.home-new-scroll-x::-webkit-scrollbar {
+	height: 8px;
+	background: transparent;
+}
+
+.home-new-scroll-x::-webkit-scrollbar-thumb {
+	height: 4px;
+	border-radius: 12px;
+	background: rgba(126, 126, 126, 0.226);
+}
+
 .banner-image {
 	width: 100%;
 	height: 60%;
@@ -178,6 +198,20 @@ input[type="number"] {
 	.home-page-two-block {
 		flex-direction: column;
 		margin-top: 10px;
+	}
+}
+
+@media (max-width: 1200px) {
+	.home-page-four-block {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 990px) {
+	.home-page-main {
+		background-image: url("../shoe_images/yoga_image_small_home_page.jpg");
+		background-repeat: no-repeat;
 	}
 }
 

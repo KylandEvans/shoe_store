@@ -3,9 +3,9 @@
 
 <%- include("./partials/paymentAndShipping.ejs") %>
 
-<main class="container">
+<main class="container container-fluid">
 	<form action="/checkout" class="row gap-3" method="POST">
-		<div class="col-6 offset-1 checkout-form-container p-0">
+		<div class="col-lg-6 offset-lg-1 checkout-form-container p-0">
 			<div class="d-flex checkout-address-header checkout-header-styles p-2">
 				<h3>1 Shipping Address:</h3>
 				<div class="toggleAddress">
@@ -73,7 +73,7 @@
 			</section>
 		</div>
 
-		<section class="total-section col-3 h-auto">
+		<section class="total-section col-lg-3 h-auto">
 			<div class="border p-3">
 				<div class="d-flex justify-content-between">
 					<h6>Items (<%= currentUser.cart.length %>):</h6>

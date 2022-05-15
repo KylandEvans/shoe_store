@@ -5,26 +5,27 @@
 	<div class="w-100 container-fluid my-5">
 		<!-- FIXME: Add breakpoint in CSS to break up height for small screens -->
 		<div class="row">
-			<div class="col-md-2">
+			<div class="col-4">
 				<h3>Payment</h3>
 			</div>
-			<div class="col-md-2">
+			<div class="col-4">
 				<h5>Items total </h5>
 				<h5>Shipping Cost </h5>
 				<h5>Estimated Tax </h5>
 				<h3>Total </h3>
 			</div>
-			<div class="col-md-2 d-flex flex-column border-end">
+			<div class="col-4 d-flex flex-column">
 				<h5>$ <%= newOrder.itemsTotal.toFixed(2) %></h5>
 				<h5>$ <%= newOrder.shippingCost.toFixed(2) %></h5>
 				<h5>$ <%= newOrder.orderTax.toFixed(2) %></h5>
 				<h3>$ <%= newOrder.orderTotal.toFixed(2) %></h3>
 			</div>
-			<div class="col-md-2">
+		</div>
+		<div class="row my-5">
+			<div class="col-4">
 				<h3>Shipping</h3>
 			</div>
-			<div class="col-md-1"></div>
-			<div class="col-md-2">
+			<div class="col-6">
 				<h5
 					><%= newOrder.shippingAddress.address1 %> <%= newOrder.shippingAddress.address2 %>
 				</h5>
