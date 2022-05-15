@@ -1,6 +1,76 @@
 <% layout("layout/boilerplate") -%>
-<main class="main-container">
-	<img src="../shoe_images/banner_image.jpg" alt="" class="banner-image" />
-	<h1>Athletic Footware For Everyone</h1>
+<main class="main-container container container-fluid">
+	<div class="d-flex justify-content-center my-3 mb-5">
+		<img src="../Icons/banner_image_logo.svg" alt="" class="img-responsive img-fluid" />
+	</div>
+	<div class="d-flex justify-content-center">
+		<img
+			src="../shoe_images/runner_home_page.jpg"
+			alt=""
+			class="banner-image h-25 w-25 mx-3 img-responsive"
+		/>
+		<img
+			src="../shoe_images/shoes_home_page.jpg"
+			alt=""
+			class="banner-image h-25 w-25 mx-3 img-responsive"
+		/>
+		<img
+			src="../shoe_images/shoe_stairs_home_page.jpg"
+			alt=""
+			class="banner-image h-25 w-25 mx-3 img-responsive"
+		/>
+	</div>
+	<div class="d-flex justify-content-center mb-5">
+		<h1>Athletic Footware For Everyone</h1>
+	</div>
+	<div class="d-flex justify-content-center mt-5">
+		<img src="../shoe_images/walking_up_stairs_home_page.jpg" alt="" class="img-responsive" />
+	</div>
+	<div class="d-flex justify-content-center mx-5">
+		<h1>Do Anything! Go Anywhere! Go Everywhere!</h1>
+	</div>
+	<div class="d-flex justify-content-center mt-5 container container-fluid">
+		<img
+			src="../shoe_images/running_road_home_page.jpg"
+			alt=""
+			class="h-75 w-75 mx-2 img-responsive img-fluid"
+		/>
+		<img
+			src="../shoe_images/running_road_night_home_page.jpg"
+			alt=""
+			class="h-75 w-75 mx-2 img-responsive img-fluid"
+		/>
+	</div>
+	<div class="d-flex justify-content-center mb-5">
+		<h1 class="fs-1">For the runners!</h1>
+	</div>
+	<div class="container container-fluid overflow-hidden">
+		<div class="d-flex mb-3 home-page-two-block">
+			<img src="../shoe_images/hanging_mountain_home_page.jpg" alt="" class="img-fluid mx-2" />
+			<img src="../shoe_images/mountain_climber_home_page.jpg" alt="" class="img-fluid mx-2" />
+		</div>
+		<div class="d-flex mb-3 home-page-two-block">
+			<img
+				src="../shoe_images/mountain_climber_top_home_page.jpg"
+				alt=""
+				class="img-fluid mx-2"
+			/>
+			<img
+				src="../shoe_images/mountain_top_clouds_home_page.jpg"
+				alt=""
+				class="img-fluid mx-2"
+			/>
+		</div>
+	</div>
+	<div class="d-flex justify-content-center mb-5">
+		<h1 class="fs-1">For the go-getters!</h1>
+	</div>
+	<div class="d-flex justify-content-center">
+		<img src="../Icons/banner_image_bottom.svg" alt="" />
+	</div>
+	<div class="d-flex justify-content-center container-fluid">
+		<a href="/shoes/men" class="btn btn-primary btn-lg m-3">Shop Men's Footware</a>
+		<a href="/shoes/women" class="btn btn-secondary btn-lg m-3">Shop Women's Footware</a>
+	</div>
 </main>
 <%- include("./partials/cart") %>

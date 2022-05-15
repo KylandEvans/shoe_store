@@ -4,7 +4,7 @@
 		<section class="images col-xs-12 col-lg-6">
 			<img src="<%= products.image %>" alt="" class="img-fluid" />
 		</section>
-		<section class="overview col-lg-5 d-flex flex-column align-items-end">
+		<section class="overview col-xs-12 col-lg-5 d-flex flex-column align-items-end">
 			<h3><%= products.name %></h3>
 			<h5 class="text-muted"><%= products.subTitle %></h5>
 			<h6>$<%= products.price.toFixed(2) %></h6>
@@ -18,13 +18,12 @@
 				</select>
 				<button class="btn btn-info mt-5 add-to-cart">Add to Cart</button>
 			</form>
+			<section class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-8 my-5">
+				<h3>Product Description</h3>
+				<p><%= products.description %></p>
+			</section>
 		</section>
 	</div>
-	<div class="row mt-5">
-		<section class="col-12">
-			<h3>Product Description</h3>
-			<p><%= products.description %></p>
-		</section>
-	</div>
+
 	<%- include("../partials/cart") %>
 </main>

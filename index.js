@@ -18,10 +18,8 @@ const LocalStrategy = require("passport-local").Strategy;
 //ISSUES:
 
 //TODO:'s
-// Add front-end and back-end validations to Register form
-// Add actual shoe information to pages.
+// Add back-end validations to Register form. Use index.js && register.ejs
 // Add email to be sent when user registers and when order is placed.
-// Finish Home page styles
 // Ensure all pages are mobile friendly
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
@@ -178,8 +176,6 @@ function getTaxPercentage(state) {
 }
 
 function validateAdminNewShoe(shoe, issues) {
-	console.log(shoe);
-
 	if (!shoe.name.length) {
 		issues.push("Name field cannot be empty!");
 	}
@@ -248,7 +244,7 @@ app.get("/shoes/nike", async (req, res) => {
 });
 
 app.get("/shoes/newbalance", async (req, res) => {
-	const products = await Product.find({ brand: "newbalance" });
+	const products = await Product.find({ brand: "new balance" });
 	const cart = req.session.cart;
 	const total = req.session.total;
 	res.render("shoes", { products, cart, total });
@@ -269,7 +265,7 @@ app.get("/shoes/men", async (req, res) => {
 });
 
 app.get("/shoes/women", async (req, res) => {
-	const products = await Product.find({ gender: "women" });
+	const products = await Product.find({ gender: "woman" });
 	const cart = req.session.cart;
 	const total = req.session.total;
 	res.render("shoes", { products, cart, total });
@@ -393,7 +389,7 @@ app.post("/logout", (req, res) => {
 	req.session.cart = [];
 	req.session.total = 0.0;
 	req.flash("success", "You have been successfully logged out!");
-	res.redirect("/");
+	res.redirect(req.session.returnTo || "/");
 });
 
 app.post("/user/add/address", isLoggedIn, async (req, res) => {
