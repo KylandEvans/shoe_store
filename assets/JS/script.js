@@ -73,6 +73,7 @@ document.addEventListener("mouseup", e => {
 
 // Front-end Validations on register Form
 registerFromSubmitBtn.addEventListener("click", () => {
+	registerFromSubmitBtn.disabled = true;
 	const firstName = document.querySelector(".register-first-name-input");
 	const lastName = document.querySelector(".register-last-name-input");
 	const email = document.querySelector(".register-email-input");
@@ -146,6 +147,7 @@ registerFromSubmitBtn.addEventListener("click", () => {
 	}
 
 	if (issues.length) {
+		registerFromSubmitBtn.disabled = false;
 		if (issues.includes(1)) {
 			firstNameIssue.classList.remove("d-none");
 		}

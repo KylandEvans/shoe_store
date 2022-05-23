@@ -1,7 +1,12 @@
+if (process.env.NODE_ENV !== "production") {
+	require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const port = 8080;
 const path = require("path");
+const ejs = require("ejs");
 const engine = require("ejs-mate");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -14,12 +19,17 @@ const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const nodemailer = require("nodemailer");
+const Email = require("email-templates");
+const Promise = require("bluebird");
 
 //ISSUES:
 
 //TODO:'s
 // Add back-end validations to Register form. Use index.js && register.ejs
 // Add email to be sent when user registers and when order is placed.
+// Add validations to checkout to ensure card is not expired
+// When site is published add links to email when register and order placed
 mongoose
 	.connect("mongodb://localhost:27017/shoe-store")
 	.then(() => {
@@ -31,7 +41,7 @@ mongoose
 	});
 
 const sessionConfig = {
-	secret: "secret",
+	secret: process.env.SESSION_CONFIG_SECRET,
 	resave: false,
 	saveUninitialized: true,
 };
@@ -58,6 +68,7 @@ app.use((req, res, next) => {
 	res.locals.cart = req.session.cart;
 	res.locals.total = req.session.cart;
 	req.session.returnTo = req.header("Referer");
+	// console.log(req.user); // TEMP: Remove when done with emails
 	next();
 });
 
@@ -197,6 +208,33 @@ function validateAdminNewShoe(shoe, issues) {
 		issues.push("Description field cannot be empty!");
 	}
 	return issues;
+}
+
+let transporter = nodemailer.createTransport({
+	host: "smtp-mail.outlook.com",
+	port: 587,
+	secure: false, // true for 465, false for other ports
+	auth: {
+		user: process.env.OUTLOOK_AUTH_USER,
+		pass: process.env.OUTLOOK_AUTH_PASS,
+	},
+});
+
+async function sendEmail(obj) {
+	return await transporter.sendMail(obj);
+}
+
+async function loadTemplate(templateName, locals = {}) {
+	let email = new Email({
+		views: {
+			options: {
+				extension: "ejs",
+			},
+		},
+	});
+	let template = path.join(__dirname, `views/templates/${templateName}`);
+	const rendered = await email.render(template, locals);
+	return rendered;
 }
 
 // Standard Routes
@@ -370,6 +408,14 @@ app.post("/register", async (req, res) => {
 			registeredUser.total = req.session.total;
 			registeredUser.save();
 		}
+		let body = await loadTemplate("welcome");
+		const obj = {
+			from: `'Not Really a Shoe Store' <NotReallyAShoeStore@outlook.com>`,
+			to: registeredUser.email,
+			subject: `Welcome ${registeredUser.firstName}`,
+			html: body,
+		};
+		await sendEmail(obj);
 		req.login(user, err => {
 			if (err) console.log(err);
 			let temp = req.session.returnTo;
@@ -544,6 +590,43 @@ app.post("/checkout", isLoggedIn, async (req, res) => {
 		orderDate: new Date().toLocaleDateString(),
 	});
 	await newOrder.save();
+	const placedOrder = await Order.findById(newOrder._id)
+		.populate({
+			path: "items",
+			populate: { path: "item" },
+		})
+		.populate("user");
+	console.log(placedOrder.items);
+	locals = {
+		//User Information
+		firstName: placedOrder.user.firstName,
+		lastName: placedOrder.user.lastName,
+		email: placedOrder.user.email,
+
+		// Shipping Information
+		address1: placedOrder.shippingAddress.address1,
+		address2: placedOrder.shippingAddress.address2,
+		city: placedOrder.shippingAddress.city,
+		state: placedOrder.shippingAddress.state,
+		zipCode: placedOrder.shippingAddress.zipCode,
+
+		//Order Informtaion
+		cardNumber: placedOrder.paymentMethod,
+		items: placedOrder.items,
+		itemsTotal: placedOrder.itemsTotal,
+		orderTax: placedOrder.orderTax,
+		shippingCost: placedOrder.shippingCost,
+		orderTotal: placedOrder.orderTotal,
+	};
+	const body = await loadTemplate("order", locals);
+	const obj = {
+		from: `Not Really A Shoe Store <NotReallyAShoeStore@outlook.com>`,
+		to: req.user.email,
+		subject: `Thank you for placing your order!`,
+		html: body,
+	};
+	const sent = await sendEmail(obj);
+	console.log(sent);
 	req.user.cart = [];
 	req.session.cart = [];
 	req.user.save();

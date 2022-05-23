@@ -1,2 +1,4 @@
 node_modules/
 TEST/
+.env
+test.html
