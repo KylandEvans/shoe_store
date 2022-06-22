@@ -23,6 +23,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const nodemailer = require("nodemailer");
 const Email = require("email-templates");
+const expressMongoSanitizer = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 //ISSUES:
 
@@ -56,9 +58,54 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
+app.use(expressMongoSanitizer());
+app.use(helmet());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+const scriptSrcUrls = [
+	"https://stackpath.bootstrapcdn.com/",
+	"https://kit.fontawesome.com/",
+	"https://cdnjs.cloudflare.com/",
+	"https://cdn.jsdelivr.net",
+	"127.0.0.1:8080",
+];
+const styleSrcUrls = [
+	"https://kit-free.fontawesome.com/",
+	"https://stackpath.bootstrapcdn.com/",
+	"https://fonts.googleapis.com/",
+	"https://cdnjs.cloudflare.com",
+	"https://cdn.jsdelivr.net",
+	"https://use.fontawesome.com/",
+	"127.0.0.1:8080",
+];
+const connectSrcUrls = ["https://cdnjs.cloudflare.com/", "https://cdn.jsdelivr.net"];
+const fontSrcUrls = ["https://fonts.gstatic.com"];
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: [],
+			connectSrc: ["'self'", ...connectSrcUrls],
+			scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+			styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+			workerSrc: ["'self'", "blob:"],
+			objectSrc: [],
+			imgSrc: [
+				"self",
+				"blob:",
+				"data:",
+				"https://res.cloudinary.com/dynljtael/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+				"https://images.unsplash.com/",
+				"127.0.0.1:8080",
+				"https://nb.scene7.com",
+				"https://images.puma.com",
+				"https://static.nike.com",
+			],
+			fontSrc: ["'self'", ...fontSrcUrls],
+		},
+	})
+);
 
 app.use((req, res, next) => {
 	res.locals.success = req.flash("success");
@@ -67,7 +114,6 @@ app.use((req, res, next) => {
 	res.locals.cart = req.session.cart;
 	res.locals.total = req.session.cart;
 	req.session.returnTo = req.header("Referer");
-	// console.log(req.user); // TEMP: Remove when done with emails
 	next();
 });
 
@@ -100,7 +146,6 @@ const isLoggedIn = (req, res, next) => {
 };
 
 const registrationError = (req, res, next) => {
-	// console.log(req.body);
 	const errors = registrationCheck(req.body);
 	if (errors.length > 0) {
 		req.flash("error", errors.join());
@@ -702,7 +747,6 @@ app.post(
 			req.flash("error", "Can't submit order without any items!");
 			res.redirect("/checkout");
 		}
-		console.log(req.body);
 		class Item {
 			constructor(item, size) {
 				this.item = item;
@@ -744,7 +788,6 @@ app.post(
 				populate: { path: "item" },
 			})
 			.populate("user");
-		console.log(placedOrder.items);
 		locals = {
 			//User Information
 			firstName: placedOrder.user.firstName,
