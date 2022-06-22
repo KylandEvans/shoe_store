@@ -196,5 +196,5 @@ registerFromSubmitBtn.addEventListener("click", () => {
 	console.log(issues);
 	issues = [];
 	console.log(issues);
-	// formRegisterForm.submit();
+	formRegisterForm.submit();
 });

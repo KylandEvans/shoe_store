@@ -1,0 +1,31 @@
+<%- layout("layout/boilerplate") %>
+
+<style>
+	.error-container {
+		height: 75vh;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.error-title {
+		padding-bottom: 50px;
+	}
+
+	.search-icon {
+		height: 50px;
+		width: 50px;
+	}
+</style>
+
+<main class="main-error-page">
+	<div class="error-container">
+		<h1 class="error-title">Error <%=err.status %> : <%=err.message %></h1>
+		<h3>Im sorry we couldn't find what you were looking for</h3>
+		<div class="error-search-icon">
+			<img src="Icons/search.svg" alt="" class="search-icon" />
+		</div>
+	</div>
+</main>

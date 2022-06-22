@@ -69,7 +69,7 @@
 	</head>
 
 	<body>
-		<div style="height: 100vh;width: auto;margin: 10px;display: block;">
+		<div style="height: 100vh;width: auto;margin: 10px;display: block; overflow-y: scroll;">
 			<div style="background-color: rgba(222, 222, 222, 0.502);padding: 10px;border-radius: 12px; margin-top: -20px;">
 				<h1>Thank you for placing your Order</h1>
 			</div>
@@ -88,35 +88,35 @@
 			</div>
 			<div style="border: 1px solid rgba(99, 99, 99, 0.221);">
 				<% for(let item of locals.items) {%> 
-				<div style="max-width: 90%;display: flex;align-items: center;">
+				<div style="max-width: 90%;display: bock;">
 					<img
 						src="<%= item.item.image %>"
 						alt=""
 						class="img"
 					/>
-					<div style="display: flex;justify-content: center;flex-direction: column;">
-						<p><%= item.item.name %></p>
-						<p><%= item.item.subtitle %></p>
-						<p><%= item.item.price.toFixed(2) %></p>
+					<div style="display: block;">
+						<p style="display: block;"><%= item.item.name %></p>
+						<p style="display: block;"><%= item.item.subTitle %></p>
+						<p style="display: block;"><%= item.item.price.toFixed(2) %></p>
 					</div>
 				<% } %> 
 			</div>
 			<div>
 				<div style="display: flex;justify-content: space-around;margin-top: 40px;">
 					<h5>Items Total: </h5>
-					<h5><%= locals.itemsTotal %></h5>
+					<h5><%= locals.itemsTotal.toFixed(2) %></h5>
 				</div>
 				<div style="display: flex;justify-content: space-around;">
 					<h5>Tax Applied: </h5>
-					<h5><%= locals.orderTax %> </h5>
+					<h5><%= locals.orderTax.toFixed(2) %> </h5>
 				</div>
 				<div style="display: flex;justify-content: space-around;">
 					<h5>Shipping Cost: </h5>
-					<h5><%= locals.shippingCost %></h5>
+					<h5><%= locals.shippingCost.toFixed(2) %></h5>
 				</div>
 				<div style="display: flex;justify-content: space-around;">
 					<h3>Order Total: </h3>
-					<h3><%= locals.orderTotal %> </h3>
+					<h3><%= locals.orderTotal.toFixed(2) %> </h3>
 				</div>
 			</div>
 			<footer>

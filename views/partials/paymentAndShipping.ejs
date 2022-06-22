@@ -221,7 +221,7 @@
 			experationYear: expYear,
 		};
 		// const lastFour = newCard.substring(12);
-		if (!localStorage.length) {
+		if (localStorage.getItem !== null) {
 			localStorage.setItem(`0`, JSON.stringify([newCardObj]));
 		} else {
 			let ls = JSON.parse(localStorage.getItem(`0`));

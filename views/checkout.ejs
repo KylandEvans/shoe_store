@@ -14,7 +14,7 @@
 			</div>
 			<section class="border-bottom address-select">
 				<% if(currentUser.addresses && currentUser.addresses.length){ %>
-				<%currentUser.addresses.forEach((address, i) => { %>
+				<%currentUser.addresses.forEach(function(address, i) { %>
 				<div class="form-check">
 					<input
 						type="radio"
@@ -123,7 +123,7 @@
 	});
 
 	const displayPaymentMethods = () => {
-		if (localStorage.length) {
+		if (localStorage.getItem("0") !== null) {
 			const strg = JSON.parse(localStorage.getItem("0"));
 			const displayArea = document.querySelector(".pmt-display-area");
 			strg.forEach((item, i) => {
