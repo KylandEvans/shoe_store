@@ -750,15 +750,15 @@ app.post(
 	catchAsync(async (req, res) => {
 		if (!req.body.shippingAddress) {
 			req.flash("error", "Please select a shipping address!");
-			res.redirect("/checkout");
+			return res.redirect("/checkout");
 		}
 		if (!req.body.paymentSelect) {
 			req.flash("error", "Please select payment method");
-			res.redirect("/checkout");
+			return res.redirect("/checkout");
 		}
 		if (!req.user.cart.length) {
 			req.flash("error", "Can't submit order without any items!");
-			res.redirect("/checkout");
+			return res.redirect("/checkout");
 		}
 		class Item {
 			constructor(item, size) {
