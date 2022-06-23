@@ -28,6 +28,7 @@
 		id="subtitle"
 		class="form-control text-field"
 		placeholder="i.e. 'Men's running shoes'"
+		value="Men's Shoes"
 	/>
 	<div class="d-none issue-span">
 		<span class="text-danger">Subtitle field cannot be empty!</span>
@@ -51,6 +52,7 @@
 		id="brand"
 		placeholder="i.e. 'Nike', 'Puma', etc.."
 		class="form-control text-field"
+		value="Nike"
 	/>
 	<div class="d-none issue-span">
 		<span class="text-danger">Brand field cannot be empty!</span>
@@ -72,6 +74,8 @@
 		<span class="text-danger">Image field cannot be empty!</span>
 	</div>
 	<h3>Choose Sizes Avlible</h3>
+	<label for="all">Check all?</label>
+	<input type="checkbox" name="all" id="all" class="all-checked" />
 	<div class="sizes-wrapper container">
 		<div class="row">
 			<!-- group-1 -->
@@ -271,6 +275,13 @@
 	const sizeChecks = document.querySelectorAll(".form-check-input");
 	const sizeIssueSpan = document.querySelector(".size-issue-span");
 	const newShoeForm = document.querySelector(".new-shoe-form");
+	const allchecks = document.querySelector(".all-checked");
+
+	allchecks.addEventListener("click", () => {
+		sizeChecks.forEach(check => {
+			check.checked = true;
+		});
+	});
 
 	submitNewShoeButton.addEventListener("click", () => {
 		for (let i = 0; i < textFields.length; i++) {
