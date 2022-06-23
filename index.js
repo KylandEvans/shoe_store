@@ -31,8 +31,9 @@ const MongoStore = require("connect-mongo");
 
 //TODO:'s
 // When site is published add links to email when register and order placed
-// Add admin and guest accounts to database before production
+
 const dbURL = process.env.DB_URL || "mongodb://localhost:27017/shoe-store";
+//
 
 mongoose
 	.connect(dbURL)
