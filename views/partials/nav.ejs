@@ -78,11 +78,17 @@
 			</ul>
 			<% if(!currentUser) {%>
 			<div class="login-wrapper me-3">
-				<img src="/Icons/user-icon.svg" alt="" />
+				<img
+					src="https://res.cloudinary.com/dynljtael/image/upload/v1655950588/shoe_store_app/user-icon_xjhcfx.svg"
+					alt=""
+				/>
 				<button class="btn login-btn">Login</button>
 			</div>
 			<div class="register-wrapper ms-3">
-				<img src="/Icons/register-icon.svg" alt="" />
+				<img
+					src="https://res.cloudinary.com/dynljtael/image/upload/v1655950431/shoe_store_app/register-icon_q5uovo.svg"
+					alt=""
+				/>
 				<button class="btn register-btn">Register</button>
 			</div>
 			<% } %> <% if(currentUser){ %>
@@ -96,7 +102,11 @@
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 					>
-						<img src="/Icons/user-icon.svg" alt="" class="me-2" />
+						<img
+							src="https://res.cloudinary.com/dynljtael/image/upload/v1655950588/shoe_store_app/user-icon_xjhcfx.svg"
+							alt=""
+							class="me-2"
+						/>
 
 						<%= currentUser.firstName.toUpperCase() %>
 					</a>
