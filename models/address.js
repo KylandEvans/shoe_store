@@ -1,13 +1,5 @@
 const mongoose = require("mongoose");
 
-mongoose
-	.connect("mongodb://localhost:27017/shoe-store")
-	.then(() => {})
-	.catch(e => {
-		console.log("Mongo Connection Failed!!");
-		console.log(e);
-	});
-
 const addressSchema = new mongoose.Schema({
 	address1: {
 		type: String,

@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
 const Product = require("./product");
 
-mongoose
-	.connect("mongodb://localhost:27017/shoe-store")
-	.then(() => {})
-	.catch(e => {
-		console.log("Mongo Connection Failed!!");
-		console.log(e);
-	});
-
 const orderSchema = new mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,

@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 const path = require("path");
 const ejs = require("ejs");
 const engine = require("ejs-mate");
@@ -25,14 +25,17 @@ const nodemailer = require("nodemailer");
 const Email = require("email-templates");
 const expressMongoSanitizer = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo");
 
 //ISSUES:
 
 //TODO:'s
 // When site is published add links to email when register and order placed
 // Add admin and guest accounts to database before production
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/shoe-store";
+
 mongoose
-	.connect("mongodb://localhost:27017/shoe-store")
+	.connect(dbURL)
 	.then(() => {
 		console.log("Mongo Connected!!");
 	})
@@ -41,11 +44,21 @@ mongoose
 		console.log(e);
 	});
 
+const store = MongoStore.create({
+	mongoUrl: dbURL,
+	touchAfter: 24 * 60 * 60,
+	autoRemove: "interval",
+	autoRemoveAfter: 14400,
+});
+
 const sessionConfig = {
+	store,
+	name: "session",
 	secret: process.env.SESSION_CONFIG_SECRET,
 	resave: false,
 	saveUninitialized: true,
 };
+
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
