@@ -119,7 +119,7 @@ body {
 }
 
 .login-modal {
-	display: none; /* TEMPORARY!! Change back to none when finished styling */
+	display: none;
 	position: fixed;
 }
 
@@ -210,7 +210,7 @@ input[type="number"] {
 
 @media (max-width: 990px) {
 	.home-page-main {
-		background-image: url("../shoe_images/yoga_image_small_home_page.jpg");
+		background-image: url("https://res.cloudinary.com/dynljtael/image/upload/v1655949846/shoe_store_app/yoga_image_small_home_page_oadgsh.jpg");
 		background-repeat: no-repeat;
 	}
 }
